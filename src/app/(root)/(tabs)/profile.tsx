@@ -20,7 +20,7 @@ export default function Profile() {
     <SafeAreaView>
       <Text>Profile</Text>
 
-      <TouchableOpacity onPress={handleSignOut}>
+      <TouchableOpacity className="w-full bg-blue-600 py-4 rounded-xl items-center mt-3 mb-4" onPress={handleSignOut}>
         <Text>Sign Out</Text>
       </TouchableOpacity>
     </SafeAreaView>
