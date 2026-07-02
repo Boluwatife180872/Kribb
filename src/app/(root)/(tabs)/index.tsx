@@ -5,7 +5,7 @@ export default function HomeScreen() {
   return (
     <SafeAreaView className="flex-1 bg-gray-50">
       <View>
-        <Text>Home</Text>
+        <Text>HomeScreen</Text>
       </View>
     </SafeAreaView>
   );
