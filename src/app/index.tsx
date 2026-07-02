@@ -8,5 +8,5 @@ export default function Index() {
 
   if (isSignedIn) return <Redirect href="/(root)/(tabs)" />;
 
-  return <Redirect href="/(auth)/sign-in" />;
+  return <Redirect href="/(auth)/sign-up" />;
 }
