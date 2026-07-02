@@ -13,9 +13,11 @@
   "dependencies": {
     "@clerk/expo": "^3.6.2",
     "@expo/vector-icons": "^15.0.2",
+    "@react-native-async-storage/async-storage": "^3.1.1",
     "@react-navigation/bottom-tabs": "^7.15.5",
     "@react-navigation/elements": "^2.9.10",
     "@react-navigation/native": "^7.1.33",
+    "@supabase/supabase-js": "^2.110.0",
     "babel-preset-expo": "~55.0.8",
     "expo": "~55.0.27",
     "expo-constants": "~55.0.16",
