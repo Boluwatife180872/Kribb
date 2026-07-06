@@ -8,6 +8,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native";
 
@@ -22,6 +23,7 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [code, setCode] = useState("");
 
+  const { height } = useWindowDimensions();
   const isLoading = fetchStatus === "fetching";
 
   if (signUp.status === "complete" || isSignedIn) {
@@ -120,11 +122,11 @@ export default function SignUp() {
 
   return (
     <ScrollView
-      contentContainerStyle={{ flexGrow: 1 }}
       className="bg-white"
       keyboardShouldPersistTaps="handled"
+      contentContainerStyle={{ flexGrow: 1 }}
     >
-      <View className="flex-1 justify-center px-6 py-12">
+      <View className="px-6 py-12 justify-center" style={{ minHeight: height }}>
         <Image
           source={require("../../../assets/images/kribb.png")}
           className="w-32 h-16 mb-8"
@@ -171,12 +173,12 @@ export default function SignUp() {
         )}
 
         <TextInput
-          className="w-full border border-gray-300 rounded-xl px-4 py-3 mb-6"
+          className="w-full border border-gray-300 rounded-xl px-4 py-3 mb-6 text-black"
           placeholder="Password"
           placeholderTextColor="#9CA3AF"
           value={password}
           onChangeText={setPassword}
-          secureTextEntry
+          secureTextEntry={true}
         />
         {errors.fields.password && (
           <Text className="text-red-500 mb-4">
