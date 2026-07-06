@@ -23,6 +23,7 @@ export default function HomeScreen() {
   const [featured, setFeatured] = useState<Property[]>([]);
   const [recommended, setRecommended] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   //console.log(featured, recommended);
 
@@ -34,22 +35,41 @@ export default function HomeScreen() {
 
   const fetchProperties = async () => {
     setLoading(true);
+    setError(null);
 
-    const { data: featuredData } = await supabase
-      .from("properties")
-      .select("*")
-      .eq("is_featured", true)
-      .order("created_at", { ascending: false });
+    try {
+      const { data: featuredData, error: featuredError } = await supabase
+        .from("properties")
+        .select("*")
+        .eq("is_featured", true)
+        .order("created_at", { ascending: false });
 
-    const { data: recommendedData } = await supabase
-      .from("properties")
-      .select("*")
-      .eq("is_featured", false)
-      .order("created_at", { ascending: false });
+      if (featuredError) {
+        console.error("Error fetching featured properties:", featuredError);
+        throw featuredError;
+      }
 
-    setFeatured(featuredData ?? []);
-    setRecommended(recommendedData ?? []);
-    setLoading(false);
+      const { data: recommendedData, error: recommendedError } = await supabase
+        .from("properties")
+        .select("*")
+        .eq("is_featured", false)
+        .order("created_at", { ascending: false });
+
+      if (recommendedError) {
+        console.error("Error fetching recommended properties:", recommendedError);
+        throw recommendedError;
+      }
+
+      setFeatured(featuredData ?? []);
+      setRecommended(recommendedData ?? []);
+    } catch (err: any) {
+      console.error("Failed to load properties:", err);
+      setError("Failed to load properties. Please try again.");
+      setFeatured([]);
+      setRecommended([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   
@@ -141,8 +161,10 @@ export default function HomeScreen() {
         )}
         ListEmptyComponent={
           !loading ? (
-            <View className="items-center py-10">
-              <Text className="text-gray-400">No properties found</Text>
+            <View className="items-center py-10 px-5">
+              <Text className={error ? "text-red-500 text-center" : "text-gray-400"}>
+                {error ? error : "No properties found"}
+              </Text>
             </View>
           ) : null
         }
