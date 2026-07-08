@@ -210,6 +210,8 @@ export default function PropertyDetails() {
               {property.address}, {property.city}
             </Text>
           </View>
+
+          {/* Web View (waiting for build to finish) */}
         </View>
       </ScrollView>
     </View>
