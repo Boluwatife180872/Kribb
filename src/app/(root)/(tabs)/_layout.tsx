@@ -20,7 +20,7 @@ function AndroidTabs() {
         />
       </NativeTabs.Trigger>
 
-      <NativeTabs.Trigger name="search">
+      <NativeTabs.Trigger name="search" disableAutomaticContentInsets={true}>
         <NativeTabs.Trigger.Label>Search</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
           src={
@@ -33,7 +33,7 @@ function AndroidTabs() {
       </NativeTabs.Trigger>
 
       {isAdmin && (
-        <NativeTabs.Trigger name="create">
+        <NativeTabs.Trigger name="create" disableAutomaticContentInsets={true}>
           <NativeTabs.Trigger.Label>Add Property</NativeTabs.Trigger.Label>
           <NativeTabs.Trigger.Icon
             src={
@@ -46,7 +46,7 @@ function AndroidTabs() {
         </NativeTabs.Trigger>
       )}
 
-      <NativeTabs.Trigger name="saved">
+      <NativeTabs.Trigger name="saved" disableAutomaticContentInsets={true}>
         <NativeTabs.Trigger.Icon
           src={
             <NativeTabs.Trigger.VectorIcon
@@ -58,7 +58,7 @@ function AndroidTabs() {
         <NativeTabs.Trigger.Label>Saved</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>
 
-      <NativeTabs.Trigger name="profile">
+      <NativeTabs.Trigger name="profile" disableAutomaticContentInsets={true}>
         <NativeTabs.Trigger.Icon
           src={
             <NativeTabs.Trigger.VectorIcon

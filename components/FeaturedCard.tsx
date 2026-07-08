@@ -21,11 +21,12 @@ export default function FeaturedCard({ property }: { property: Property }) {
       onPress={() => router.push(`/(root)/property/${property.id}`)}
     >
       <Image
-        source={
-          property.images.length > 0
-            ? { uri: property.images[0] }
-            : require("@/assets/images/kribb.png")
-        }
+        source={{
+          uri:
+            property.images.length > 0
+              ? property.images[0]
+              : require("@/assets/images/kribb.png"),
+        }}
         className="w-full h-44"
         resizeMode="cover"
       />
@@ -81,3 +82,5 @@ export default function FeaturedCard({ property }: { property: Property }) {
     </TouchableOpacity>
   );
 }
+
+// 2:13:56
