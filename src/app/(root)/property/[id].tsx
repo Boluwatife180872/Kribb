@@ -340,6 +340,17 @@ export default function PropertyDetails() {
         imageIndex={activeIndex}
         visible={imageViewerVisible}
         onRequestClose={() => setImageViewerVisible(false)}
+        HeaderComponent={() => (
+          <View className="px-5" style={{ alignItems: "flex-end", paddingTop: 80 }}>
+            <TouchableOpacity
+              onPress={() => setImageViewerVisible(false)}
+              className="w-11 h-11 items-center justify-center rounded-full"
+              style={{ backgroundColor: "#00000077" }}
+            >
+              <Text className="text-white text-xl text-center">✕</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       />
     </View>
   );
