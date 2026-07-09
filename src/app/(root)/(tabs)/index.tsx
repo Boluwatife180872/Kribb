@@ -91,7 +91,14 @@ export default function HomeScreen() {
                 resizeMode="contain"
               />
               <View className="items-end">
-                <Text className="text-gray-500 text-xs">Good morning 👋</Text>
+                <Text className="text-gray-600 text-sm">
+                  {(() => {
+                    const h = new Date().getHours();
+                    if (h < 12) return "Good morning";
+                    if (h < 17) return "Good afternoon";
+                    return "Good evening";
+                  })()} 👋
+                </Text>
                 <Text className="text-gray-900 text-base font-bold">
                   {user?.firstName ?? "User"}
                 </Text>

@@ -3,9 +3,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
+  Alert,
   Dimensions,
   FlatList,
   Image,
+  Linking,
   NativeScrollEvent,
   NativeSyntheticEvent,
   ScrollView,
@@ -21,7 +23,12 @@ import { formatPrice } from "../../../../lib/utils";
 import { useUserStore } from "../../../../store/userStore";
 import { Property } from "../../../../types";
 
+import ImageViewing from "react-native-image-viewing";
+import { WebView } from "react-native-webview";
+
 const { width } = Dimensions.get("window");
+
+const ADMIN_PHONE = "+2347085115454";
 
 export default function PropertyDetails() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -52,6 +59,44 @@ export default function PropertyDetails() {
     setLoading(false);
   };
 
+  const handleContact = () => {
+    const message = `Hi! I'm interested in the property: ${property?.title}`;
+    const url = `https://wa.me/${ADMIN_PHONE}?text=${encodeURIComponent(
+      message,
+    )}`;
+    Linking.openURL(url);
+  };
+
+  const handleDelete = () => {
+    Alert.alert("Delete Property", "Are you sure?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: async () => {
+          await authSupabase.from("properties").delete().eq("id", id);
+          router.replace("/(root)/(tabs)");
+        },
+      },
+    ]);
+  };
+
+  const handleMarkSold = () => {
+    Alert.alert("Mark as Sold", "Are you sure?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Mark Sold",
+        onPress: async () => {
+          await authSupabase
+            .from("properties")
+            .update({ is_sold: true })
+            .eq("id", id);
+          setProperty((prev) => (prev ? { ...prev, is_sold: true } : prev));
+        },
+      },
+    ]);
+  };
+
   const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     const index = Math.round(e.nativeEvent.contentOffset.x / width);
     setActiveIndex(index);
@@ -64,6 +109,12 @@ export default function PropertyDetails() {
       </View>
     );
   }
+
+  const mapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${
+    property.longitude - 0.003
+  }%2C${property.latitude - 0.003}%2C${property.longitude + 0.003}%2C${
+    property.latitude + 0.003
+  }&layer=mapnik&marker=${property.latitude}%2C${property.longitude}`;
 
   const isLongDesc = (property.description?.length ?? 0) > 150;
   const displayDesc =
@@ -131,7 +182,7 @@ export default function PropertyDetails() {
 
         {/* Content */}
         <View
-          className="px-5 pt-5 pb-8"
+          className="px-5 pt-5 pb-24"
           style={{ opacity: property.is_sold ? 0.6 : 1 }}
         >
           {/* Badges */}
@@ -212,8 +263,84 @@ export default function PropertyDetails() {
           </View>
 
           {/* Web View (waiting for build to finish) */}
+          <TouchableOpacity
+            onPress={() =>
+              router.push({
+                pathname: "/(root)/property/map",
+                params: {
+                  latitude: property.latitude,
+                  longitude: property.longitude,
+                  title: property.title,
+                  address: `${property.address}, ${property.city}`,
+                },
+              })
+            }
+            activeOpacity={0.9}
+            className="rounded-2xl overflow-hidden mb-6"
+            style={{ height: 200 }}
+          >
+            <WebView
+              source={{ uri: mapUrl }}
+              style={{ flex: 1 }}
+              scrollEnabled={false}
+              pointerEvents="none"
+            />
+            <View className="absolute bottom-3 right-3 bg-white/90 px-3 py-1 rounded-full flex-row items-center gap-1">
+              <Ionicons name="expand-outline" size={12} color="#374151" />
+              <Text className="text-gray-600 text-xs font-medium">
+                Tap to expand
+              </Text>
+            </View>
+          </TouchableOpacity>
+
+          {/* Contact Button */}
+          <TouchableOpacity
+            onPress={handleContact}
+            className="flex-row items-center justify-center gap-2 bg-green-600 py-4 rounded-2xl mb-4"
+          >
+            <Ionicons name="logo-whatsapp" size={20} color="white" />
+            <Text className="text-white font-bold text-base">
+              Contact Agent
+            </Text>
+          </TouchableOpacity>
+
+          {/* Admin Actions */}
+          {isAdmin && (
+            <View className="flex-row gap-3">
+              {!property.is_sold && (
+                <TouchableOpacity
+                  onPress={handleMarkSold}
+                  className="flex-1 flex-row items-center justify-center gap-2 bg-amber-50 py-4 rounded-2xl border border-amber-200"
+                >
+                  <Ionicons
+                    name="checkmark-circle-outline"
+                    size={18}
+                    color="#D97706"
+                  />
+                  <Text className="text-amber-600 font-semibold">
+                    Mark Sold
+                  </Text>
+                </TouchableOpacity>
+              )}
+              <TouchableOpacity
+                onPress={handleDelete}
+                className="flex-1 flex-row items-center justify-center gap-2 bg-red-50 py-4 rounded-2xl border border-red-100"
+              >
+                <Ionicons name="trash-outline" size={18} color="#EF4444" />
+                <Text className="text-red-500 font-semibold">Delete</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       </ScrollView>
+
+      {/* Image Viewer */}
+      <ImageViewing
+        images={property.images.map((uri) => ({ uri }))}
+        imageIndex={activeIndex}
+        visible={imageViewerVisible}
+        onRequestClose={() => setImageViewerVisible(false)}
+      />
     </View>
   );
 }
