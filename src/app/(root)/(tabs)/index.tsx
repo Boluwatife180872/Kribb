@@ -11,10 +11,11 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
 import FeaturedCard from "../../../../components/FeaturedCard";
+import PropertyCard from "../../../../components/PropertyCard";
 import { supabase } from "../../../../lib/supabase";
 import { Property } from "../../../../types";
-import PropertyCard from "../../../../components/PropertyCard";
 
 export default function HomeScreen() {
   const { user } = useUser();
@@ -56,7 +57,10 @@ export default function HomeScreen() {
         .order("created_at", { ascending: false });
 
       if (recommendedError) {
-        console.error("Error fetching recommended properties:", recommendedError);
+        console.error(
+          "Error fetching recommended properties:",
+          recommendedError,
+        );
         throw recommendedError;
       }
 
@@ -72,10 +76,8 @@ export default function HomeScreen() {
     }
   };
 
-  
-
   return (
-    <SafeAreaView className="flex-1 bg-gray-50">
+    <SafeAreaView className="flex-1 bg-gray-50" edges={['top']}>
       <FlatList
         data={recommended}
         keyExtractor={(item) => item.id}
@@ -97,7 +99,8 @@ export default function HomeScreen() {
                     if (h < 12) return "Good morning";
                     if (h < 17) return "Good afternoon";
                     return "Good evening";
-                  })()} 👋
+                  })()}{" "}
+                  👋
                 </Text>
                 <Text className="text-gray-900 text-base font-bold">
                   {user?.firstName ?? "User"}
@@ -169,7 +172,9 @@ export default function HomeScreen() {
         ListEmptyComponent={
           !loading ? (
             <View className="items-center py-10 px-5">
-              <Text className={error ? "text-red-500 text-center" : "text-gray-400"}>
+              <Text
+                className={error ? "text-red-500 text-center" : "text-gray-400"}
+              >
                 {error ? error : "No properties found"}
               </Text>
             </View>

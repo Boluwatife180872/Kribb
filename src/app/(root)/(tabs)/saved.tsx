@@ -49,9 +49,8 @@ export default function Saved() {
     }, [fetchSaved]),
   );
 
-  return (
-    <SafeAreaView className="flex-1 bg-gray-50">
-      {/* Header */}
+return (
+    <SafeAreaView className="flex-1 bg-gray-50" edges={['top']}>
       <View className="px-5 pt-4 pb-3">
         <Text className="text-2xl font-bold text-gray-900">Saved</Text>
         {!loading && (

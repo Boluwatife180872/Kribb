@@ -77,14 +77,14 @@ export default function Profile() {
 
   if (!isLoaded || !user) {
     return (
-      <SafeAreaView className="flex-1 bg-white items-center justify-center">
+      <SafeAreaView className="flex-1 bg-white items-center justify-center" edges={['top']}>
         <ActivityIndicator size="large" color="#3B82F6" />
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-white mb-10">
+    <SafeAreaView className="flex-1 bg-white" edges={['top']}>
       <View className="items-center py-8">
         <View>
           <Image

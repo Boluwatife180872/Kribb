@@ -88,7 +88,7 @@ export default function Search() {
   // 2:37:00
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50">
+    <SafeAreaView className="flex-1 bg-gray-50" edges={['top']}>
       <View className="px-5 pt-4 pb-3">
         <Text className="text-2xl font-bold text-gray-900 mb-4">
           Find Property
