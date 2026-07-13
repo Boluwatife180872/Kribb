@@ -388,18 +388,6 @@ export default function Create() {
             />
           </View>
 
-          <View className={sectionClass}>
-            <Text className={labelClass}>Area (sq ft)</Text>
-            <TextInput
-              className={inputClass}
-              placeholder="e.g. 1200"
-              placeholderTextColor="#9CA3AF"
-              value={form.areaSqft}
-              onChangeText={(v) => updateForm({ areaSqft: v })}
-              keyboardType="numeric"
-            />
-          </View>
-
           {/* Location */}
           <View className={sectionClass}>
             <Text className={labelClass}>Address</Text>

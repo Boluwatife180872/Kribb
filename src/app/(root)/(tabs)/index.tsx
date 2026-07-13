@@ -88,7 +88,7 @@ export default function HomeScreen() {
             {/* Header */}
             <View className="flex-row items-center justify-between px-5 pt-4 pb-5">
               <Image
-                source={require("../../../../assets/images/kribb.png")}
+                source={require("../../../../assets/images/main-plazly.png")}
                 style={{ width: 90, height: 36 }}
                 resizeMode="contain"
               />
@@ -153,7 +153,7 @@ export default function HomeScreen() {
                   renderItem={({ item }) => <FeaturedCard property={item} />}
                   horizontal
                   showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={{ paddingHorizontal: 20 }}
+                  contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 8 }}
                 />
               )}
             </View>
