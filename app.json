@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "kribb-app",
-    "slug": "kribb-app",
+    "name": "Plazly",
+    "slug": "plazly",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/plazly.png",
-    "scheme": "kribbapp",
+    "scheme": "plazly",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon",
+      "icon": "./assets/images/plazly.png",
       "bundleIdentifier": "com.bolucodes.kribbapp",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
@@ -27,22 +27,23 @@
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/main-plazly.png"
     },
     "plugins": [
       "expo-router",
       [
         "expo-location",
         {
-          "locationWhenInUsePermission": "Allow kribb to access your location to tag property coordinates"
+          "locationWhenInUsePermission": "Allow Plazly to access your location to tag property coordinates"
         }
       ],
       [
         "expo-splash-screen",
         {
           "backgroundColor": "#FFFFFF",
+          "image": "./assets/images/main-plazly.png",
           "android": {
-            "image": "./assets/images/plazly.png",
+            "image": "./assets/images/main-plazly.png",
             "imageWidth": 76
           }
         }

@@ -26,7 +26,7 @@ export default function FeaturedCard({ property }: { property: Property }) {
             uri:
               property.images.length > 0
                 ? property.images[0]
-                : require("@/assets/images/kribb.png"),
+                : require("@/assets/images/main-plazly.png"),
           }}
           className="w-full h-44"
           resizeMode="cover"

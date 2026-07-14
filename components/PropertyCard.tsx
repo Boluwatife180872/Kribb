@@ -41,7 +41,7 @@ export default function PropertyCard({
           uri:
             property.images.length > 0
               ? property.images[0]
-              : require("@/assets/images/kribb.png"),
+              : require("@/assets/images/main-plazly.png"),
         }}
         className="w-28 h-28"
         resizeMode="cover"

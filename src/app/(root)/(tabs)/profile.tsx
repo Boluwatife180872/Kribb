@@ -13,11 +13,13 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useUserStore } from "../../../../store/userStore";
 
 export default function Profile() {
   const router = useRouter();
   const { user, isLoaded } = useUser();
   const { signOut } = useAuth();
+  const isAdmin = useUserStore((state) => state.isAdmin);
   const [isUpdating, setIsUpdating] = useState(false);
 
   const handleSignOut = async () => {
@@ -119,12 +121,17 @@ export default function Profile() {
           label="Saved Properties"
           onPress={() => router.push("/(root)/(tabs)/saved")}
         />
+        {isAdmin && (
+          <MenuItem
+            icon="shield-checkmark-outline"
+            label="Manage Listings"
+            onPress={() => router.push("/(root)/admin")}
+          />
+        )}
         <MenuItem
           icon="notifications-outline"
           label="Notifications"
-          onPress={() =>
-            Alert.alert("Coming Soon", "Notifications coming soon!")
-          }
+          onPress={() => router.push("/(root)/notifications")}
         />
         <MenuItem
           icon="settings-outline"

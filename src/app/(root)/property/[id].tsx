@@ -3,6 +3,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Alert,
   Dimensions,
   FlatList,
@@ -101,6 +102,14 @@ export default function PropertyDetails() {
     const index = Math.round(e.nativeEvent.contentOffset.x / width);
     setActiveIndex(index);
   };
+
+  if (loading) {
+    return (
+      <View className="flex-1 items-center justify-center bg-white">
+        <ActivityIndicator size="large" color="#2563EB" />
+      </View>
+    );
+  }
 
   if (!property) {
     return (

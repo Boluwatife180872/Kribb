@@ -1,8 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import * as Location from "expo-location";
-import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -15,7 +15,10 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useSupabase } from "../../../../hooks/useSupabase";
+import { useSupabase } from "../../../../../hooks/useSupabase";
+import { supabase } from "../../../../../lib/supabase";
+import { useUserStore } from "../../../../../store/userStore";
+import { Property } from "../../../../../types";
 
 const TYPES = ["apartment", "house", "villa", "studio"] as const;
 type PropertyType = (typeof TYPES)[number];
@@ -45,33 +48,68 @@ interface FormState {
   localImages: string[];
 }
 
-const INITIAL_FORM: FormState = {
-  title: "",
-  description: "",
-  price: "",
-  type: "apartment",
-  bedrooms: 1,
-  bathrooms: 1,
-  areaSqft: "",
-  address: "",
-  city: "",
-  latitude: "",
-  longitude: "",
-  isFeatured: false,
-  images: [],
-  localImages: [],
-};
-
-export default function Create() {
+export default function EditProperty() {
+  const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const authSupabase = useSupabase();
+  const isAdmin = useUserStore((state) => state.isAdmin);
 
-  const [form, setForm] = useState<FormState>(INITIAL_FORM);
-
-  // Loading states
+  const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [uploadingImages, setUploadingImages] = useState(false);
   const [detectingLocation, setDetectingLocation] = useState(false);
+
+  const [form, setForm] = useState<FormState>({
+    title: "",
+    description: "",
+    price: "",
+    type: "apartment",
+    bedrooms: 1,
+    bathrooms: 1,
+    areaSqft: "",
+    address: "",
+    city: "",
+    latitude: "",
+    longitude: "",
+    isFeatured: false,
+    images: [],
+    localImages: [],
+  });
+
+  useEffect(() => {
+    if (!isAdmin) {
+      router.replace("/(root)/(tabs)");
+      return;
+    }
+    fetchProperty();
+  }, [id]);
+
+  const fetchProperty = async () => {
+    const { data } = await supabase
+      .from("properties")
+      .select("*")
+      .eq("id", id)
+      .single();
+    if (data) {
+      setForm({
+        title: data.title,
+        description: data.description ?? "",
+        price: String(data.price),
+        type: data.type as PropertyType,
+        bedrooms: data.bedrooms,
+        bathrooms: data.bathrooms,
+        areaSqft: data.area_sqft ? String(data.area_sqft) : "",
+        address: data.address,
+        city: data.city,
+        latitude: data.latitude ? String(data.latitude) : "",
+        longitude: data.longitude ? String(data.longitude) : "",
+        isFeatured: data.is_featured,
+        images: data.images,
+        localImages: data.images,
+      });
+    }
+    setLoading(false);
+  };
 
   const updateForm = (fields: Partial<FormState>) =>
     setForm((prev) => ({ ...prev, ...fields }));
@@ -90,7 +128,7 @@ export default function Create() {
       allowsMultipleSelection: true,
       quality: 0.7,
       base64: true,
-      selectionLimit: 6,
+      selectionLimit: 6 - form.images.length,
     });
 
     if (result.canceled) return;
@@ -172,7 +210,6 @@ export default function Create() {
     }
   };
 
-  // ─── Submit ────────────────────────────────────────────────
   const handleSubmit = async () => {
     if (!form.title.trim())
       return Alert.alert("Validation", "Title is required.");
@@ -198,44 +235,55 @@ export default function Create() {
 
     setSubmitting(true);
 
-    const { error } = await authSupabase.from("properties").insert({
-      title: form.title.trim(),
-      description: form.description.trim(),
-      price: priceNum,
-      type: form.type,
-      bedrooms: form.bedrooms,
-      bathrooms: form.bathrooms,
-      area_sqft: form.areaSqft ? Number(form.areaSqft) : null,
-      address: form.address.trim(),
-      city: form.city.trim(),
-      latitude: form.latitude ? Number(form.latitude) : null,
-      longitude: form.longitude ? Number(form.longitude) : null,
-      images: form.images,
-      is_featured: form.isFeatured,
-      is_sold: false,
-    });
+    const { error } = await authSupabase
+      .from("properties")
+      .update({
+        title: form.title.trim(),
+        description: form.description.trim(),
+        price: priceNum,
+        type: form.type,
+        bedrooms: form.bedrooms,
+        bathrooms: form.bathrooms,
+        area_sqft: form.areaSqft ? Number(form.areaSqft) : null,
+        address: form.address.trim(),
+        city: form.city.trim(),
+        latitude: form.latitude ? Number(form.latitude) : null,
+        longitude: form.longitude ? Number(form.longitude) : null,
+        images: form.images,
+        is_featured: form.isFeatured,
+      })
+      .eq("id", id);
 
     setSubmitting(false);
 
     if (error) {
-      Alert.alert("Error", "Failed to create property. Please try again.");
+      Alert.alert("Error", "Failed to update property. Please try again.");
       console.error(error);
       return;
     }
 
-    setForm(INITIAL_FORM);
-    Alert.alert("Success! 🎉", "Property listed successfully.", [
-      { text: "OK", onPress: () => router.replace("/(root)/(tabs)") },
+    Alert.alert("Success!", "Property updated successfully.", [
+      { text: "OK", onPress: () => router.back() },
     ]);
   };
+
+  if (loading) {
+    return (
+      <SafeAreaView className="flex-1 bg-white items-center justify-center">
+        <ActivityIndicator size="large" color="#3B82F6" />
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
       <KeyboardAvoidingView>
-        {/* Header */}
-        <View className="flex-row items-center px-5 pt-4 pb-3">
+        <View className="flex-row items-center px-5 pt-4 pb-3 gap-3">
+          <TouchableOpacity onPress={() => router.back()}>
+            <Ionicons name="arrow-back" size={24} color="#111827" />
+          </TouchableOpacity>
           <Text className="text-2xl font-bold text-gray-900 flex-1">
-            Add Property
+            Edit Property
           </Text>
         </View>
 
@@ -244,7 +292,6 @@ export default function Create() {
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
-          {/* Images */}
           <View className={sectionClass}>
             <Text className={labelClass}>
               Photos{" "}
@@ -322,7 +369,6 @@ export default function Create() {
             />
           </View>
 
-          {/* Price */}
           <View className={sectionClass}>
             <Text className={labelClass}>Price (₦)</Text>
             <TextInput
@@ -338,7 +384,6 @@ export default function Create() {
             </Text>
           </View>
 
-          {/* Property Type */}
           <View className={sectionClass}>
             <Text className={labelClass}>Property Type</Text>
             <View className="flex-row flex-wrap gap-2">
@@ -364,7 +409,6 @@ export default function Create() {
             </View>
           </View>
 
-          {/* Bedrooms / Bathrooms */}
           <View className="flex-row gap-4 mb-5">
             <Counter
               label="Bedrooms"
@@ -390,7 +434,6 @@ export default function Create() {
             />
           </View>
 
-          {/* Location */}
           <View className={sectionClass}>
             <Text className={labelClass}>Address</Text>
             <TextInput
@@ -413,7 +456,6 @@ export default function Create() {
             />
           </View>
 
-          {/* Coordinates */}
           <View className={sectionClass}>
             <View className="flex-row items-center justify-between mb-1.5">
               <Text className={labelClass}>Coordinates</Text>
@@ -457,7 +499,6 @@ export default function Create() {
             </View>
           </View>
 
-          {/* Toggles */}
           <View className="gap-3 mb-5">
             <Toggle
               label="Featured Property"
@@ -467,7 +508,6 @@ export default function Create() {
             />
           </View>
 
-          {/* Submit */}
           <TouchableOpacity
             onPress={handleSubmit}
             disabled={submitting || uploadingImages}
@@ -485,7 +525,7 @@ export default function Create() {
               <ActivityIndicator color="white" />
             ) : (
               <Text className="text-white font-bold text-base">
-                List Property
+                Save Changes
               </Text>
             )}
           </TouchableOpacity>
@@ -495,7 +535,6 @@ export default function Create() {
   );
 }
 
-// ─── UI Helpers ────────────────────────────────────────────
 const Counter = ({
   label,
   value,
