@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "694431768888",
+    "project_id": "plazly-c4222",
+    "storage_bucket": "plazly-c4222.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:694431768888:android:aeeac30361c814215fa1cd",
+        "android_client_info": {
+          "package_name": "com.bolucodes.kribbapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6Tdu26AZwP9AGTwYstCEDU-dg-Gj3ppE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
