@@ -86,6 +86,8 @@ function AndroidTabs() {
     <Tabs
       screenOptions={{
         headerShown: false,
+        tabBarActiveTintColor: "#0F766E",
+        tabBarInactiveTintColor: "#9CA3AF",
         tabBarStyle: {
           height: 60 + insets.bottom,
           paddingBottom: insets.bottom > 0 ? insets.bottom : 8,

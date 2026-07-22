@@ -37,7 +37,7 @@ const PRICE_PRESETS = [
 
 const chip = (active: boolean) =>
   `px-4 py-2 rounded-full border ${
-    active ? "bg-blue-600 border-blue-600" : "bg-white border-gray-200"
+    active ? "bg-teal-700 border-teal-700" : "bg-white border-gray-200"
   }`;
 
 const chipText = (active: boolean) =>
@@ -105,7 +105,7 @@ export default function FilterModal({
           </TouchableOpacity>
           <Text className="text-lg font-bold text-gray-900">Filters</Text>
           <TouchableOpacity onPress={handleReset}>
-            <Text className="text-blue-600 font-semibold text-sm">Reset</Text>
+            <Text className="text-teal-700 font-semibold text-sm">Reset</Text>
           </TouchableOpacity>
         </View>
 
@@ -212,13 +212,13 @@ export default function FilterModal({
                   }}
                   className={`px-3 py-1.5 rounded-full border ${
                     active
-                      ? "bg-blue-50 border-blue-300"
+                      ? "bg-teal-50 border-teal-300"
                       : "bg-white border-gray-200"
                   }`}
                 >
                   <Text
                     className={`text-xs font-medium ${
-                      active ? "text-blue-600" : "text-gray-500"
+                      active ? "text-teal-700" : "text-gray-500"
                     }`}
                   >
                     {p.label}
@@ -233,9 +233,9 @@ export default function FilterModal({
         <View className="px-5 pb-16 pt-4 bg-white border-t border-gray-100">
           <TouchableOpacity
             onPress={handleApply}
-            className="bg-blue-600 rounded-2xl py-4 items-center"
+            className="bg-teal-700 rounded-2xl py-4 items-center"
             style={{
-              shadowColor: "#2563EB",
+              shadowColor: "#0F766E",
               shadowOffset: { width: 0, height: 4 },
               shadowOpacity: 0.3,
               shadowRadius: 8,

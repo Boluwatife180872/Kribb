@@ -100,7 +100,7 @@ export default function SignUp() {
         <TouchableOpacity
           onPress={onVerifyPress}
           disabled={isLoading}
-          className="w-full bg-blue-600 py-4 rounded-xl items-center mb-4"
+          className="w-full bg-teal-700 py-4 rounded-xl items-center mb-4"
         >
           {isLoading ? (
             <ActivityIndicator color="white" />
@@ -113,11 +113,11 @@ export default function SignUp() {
           onPress={() => signUp.verifications.sendEmailCode()}
           className="py-2"
         >
-          <Text className="text-blue-600">I need a new code</Text>
+          <Text className="text-teal-700">I need a new code</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => signUp.reset()} className="py-2">
-          <Text className="text-blue-600">Start over</Text>
+          <Text className="text-teal-700">Start over</Text>
         </TouchableOpacity>
       </View>
     );
@@ -205,7 +205,7 @@ export default function SignUp() {
           <TouchableOpacity
             onPress={onSignUpPress}
             disabled={isLoading}
-            className="w-full bg-blue-600 py-4 rounded-xl items-center mb-4"
+            className="w-full bg-teal-700 py-4 rounded-xl items-center mb-4"
           >
             {isLoading ? (
               <ActivityIndicator color="white" />
@@ -217,7 +217,7 @@ export default function SignUp() {
           <View className="flex-row justify-center">
             <Text className="text-gray-500">Already have an account? </Text>
             <Link href="/sign-in">
-              <Text className="text-blue-600 font-semibold">Sign In</Text>
+              <Text className="text-teal-700 font-semibold">Sign In</Text>
             </Link>
           </View>
         </View>

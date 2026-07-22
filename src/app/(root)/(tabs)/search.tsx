@@ -124,7 +124,7 @@ export default function Search() {
           <TouchableOpacity
             onPress={() => setShowFilters(true)}
             className={`w-12 h-12 rounded-2xl items-center justify-center ${
-              activeFilterCount > 0 ? "bg-blue-600" : "bg-white"
+              activeFilterCount > 0 ? "bg-teal-700" : "bg-white"
             }`}
             style={{
               shadowColor: "#000",
@@ -153,8 +153,8 @@ export default function Search() {
         {activeFilterCount > 0 && (
           <View className="flex-row flex-wrap gap-2 mt-3">
             {type && (
-              <View className="flex-row items-center bg-blue-50 border border-blue-200 rounded-full px-3 py-1 gap-1">
-                <Text className="text-blue-700 text-xs font-semibold capitalize">
+              <View className="flex-row items-center bg-teal-50 border border-teal-200 rounded-full px-3 py-1 gap-1">
+                <Text className="text-teal-800 text-xs font-semibold capitalize">
                   {type}
                 </Text>
                 <TouchableOpacity onPress={() => setType(null)}>
@@ -163,9 +163,9 @@ export default function Search() {
               </View>
             )}
             {bedrooms !== null && (
-              <View className="flex-row items-center bg-blue-50 border border-blue-200 rounded-full px-3 py-1 gap-1">
+              <View className="flex-row items-center bg-teal-50 border border-teal-200 rounded-full px-3 py-1 gap-1">
                 <Ionicons name="bed-outline" size={11} color="#1D4ED8" />
-                <Text className="text-blue-700 text-xs font-semibold">
+                <Text className="text-teal-800 text-xs font-semibold">
                   {bedrooms === 4
                     ? "4+ beds"
                     : `${bedrooms} bed${bedrooms > 1 ? "s" : ""}`}
@@ -176,8 +176,8 @@ export default function Search() {
               </View>
             )}
             {(minPrice !== null || maxPrice !== null) && (
-              <View className="flex-row items-center bg-blue-50 border border-blue-200 rounded-full px-3 py-1 gap-1">
-                <Text className="text-blue-700 text-xs font-semibold">
+              <View className="flex-row items-center bg-teal-50 border border-teal-200 rounded-full px-3 py-1 gap-1">
+                <Text className="text-teal-800 text-xs font-semibold">
                   {minPrice && maxPrice
                     ? `${formatPrice(minPrice)} – ${formatPrice(maxPrice)}`
                     : minPrice
@@ -222,7 +222,7 @@ export default function Search() {
               </Text>
             </View>
           ) : (
-            <ActivityIndicator size="large" color="#2563EB" className="py-20" />
+            <ActivityIndicator size="large" color="#0F766E" className="py-20" />
           )
         }
       />

@@ -11,6 +11,8 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
+import { useAuth } from "@clerk/expo";
+import { useSupabase } from "../../../hooks/useSupabase";
 import { useNotificationStore } from "../../../store/notificationStore";
 
 Notifications.setNotificationHandler({
@@ -25,6 +27,8 @@ Notifications.setNotificationHandler({
 
 export default function NotificationsScreen() {
   const router = useRouter();
+  const { userId } = useAuth();
+  const authSupabase = useSupabase();
   const {
     newListingNotifications,
     expoPushToken,
@@ -37,8 +41,16 @@ export default function NotificationsScreen() {
     if (!newListingNotifications) {
       await registerForPushNotifications();
     } else {
-      setNewListingNotifications(false);
+      await disableNotifications();
     }
+  };
+
+  const disableNotifications = async () => {
+    if (userId) {
+      await authSupabase.from("push_tokens").delete().eq("user_id", userId);
+    }
+    setExpoPushToken(null);
+    setNewListingNotifications(false);
   };
 
   const registerForPushNotifications = async () => {
@@ -65,6 +77,15 @@ export default function NotificationsScreen() {
       }
 
       const tokenData = await Notifications.getExpoPushTokenAsync();
+      //console.log("Expo Push Token:", tokenData.data);
+
+      if (userId) {
+        await authSupabase.from("push_tokens").upsert(
+          { user_id: userId, token: tokenData.data },
+          { onConflict: "user_id" },
+        );
+      }
+
       setExpoPushToken(tokenData.data);
       setNewListingNotifications(true);
     } catch (error) {
@@ -112,7 +133,7 @@ export default function NotificationsScreen() {
           </View>
           <View
             className={`w-12 h-7 rounded-full justify-center px-0.5 ${
-              newListingNotifications ? "bg-blue-600" : "bg-gray-300"
+              newListingNotifications ? "bg-teal-700" : "bg-gray-300"
             } ${registering ? "opacity-50" : ""}`}
           >
             <View

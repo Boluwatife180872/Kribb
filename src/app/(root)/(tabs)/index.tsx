@@ -128,7 +128,7 @@ export default function HomeScreen() {
                 onPress={() =>
                   router.push("/(root)/(tabs)/search?openFilters=true")
                 }
-                className="w-8 h-8 bg-blue-600 rounded-xl items-center justify-center"
+                className="w-8 h-8 bg-teal-700 rounded-xl items-center justify-center"
               >
                 <Ionicons name="options-outline" size={15} color="white" />
               </TouchableOpacity>
@@ -143,7 +143,7 @@ export default function HomeScreen() {
               {loading ? (
                 <ActivityIndicator
                   size="small"
-                  color="#2563EB"
+                  color="#0F766E"
                   className="py-10"
                 />
               ) : (

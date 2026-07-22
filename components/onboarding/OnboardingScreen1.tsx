@@ -1,6 +1,8 @@
+import { useEffect } from "react";
 import { Image, Text, TouchableOpacity, View, useWindowDimensions } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import Animated, { FadeInDown } from "react-native-reanimated";
+import Animated, { FadeInDown, useSharedValue, withRepeat, withTiming, useAnimatedStyle, Easing } from "react-native-reanimated";
 
 interface Props {
   fontsLoaded: boolean;
@@ -9,19 +11,32 @@ interface Props {
 
 export default function OnboardingScreen1({ fontsLoaded, onAdvance }: Props) {
   const { width, height } = useWindowDimensions();
+  const bounce = useSharedValue(0);
+
+  useEffect(() => {
+    bounce.value = withRepeat(
+      withTiming(8, { duration: 1000, easing: Easing.inOut(Easing.sin) }),
+      -1,
+      true,
+    );
+  }, []);
+
+  const arrowStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: -bounce.value }],
+  }));
 
   return (
     <View className="flex-1 bg-white">
       <Image
         source={require("../../assets/images/house1.jpg")}
-        style={{ width, height }}
+        style={{ position: "absolute", top: 0, left: 0, width, height }}
         resizeMode="cover"
       />
 
       <LinearGradient
         colors={["transparent", "rgba(0,0,0,0.65)"]}
         locations={[0.45, 1]}
-        style={{ position: "absolute", bottom: 0, width, height: height * 0.5 }}
+        style={{ position: "absolute", bottom: 0, left: 0, width, height: height * 0.5 }}
       />
 
       <Animated.View
@@ -52,24 +67,27 @@ export default function OnboardingScreen1({ fontsLoaded, onAdvance }: Props) {
         </Text>
       </Animated.View>
 
-      <TouchableOpacity
-        onPress={onAdvance}
-        activeOpacity={1}
-        style={{ position: "absolute", bottom: 70, alignSelf: "center" }}
+      <Animated.View
+        entering={FadeInDown.duration(800).delay(900)}
+        style={[{ position: "absolute", bottom: 70, alignSelf: "center" }, arrowStyle]}
       >
-        <View
-          style={{
-            width: 44,
-            height: 44,
-            borderRadius: 22,
-            backgroundColor: "rgba(255,255,255,0.2)",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Text style={{ color: "#fff", fontSize: 20, lineHeight: 22 }}>→</Text>
-        </View>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={onAdvance} activeOpacity={0.7}>
+          <View
+            style={{
+              width: 48,
+              height: 48,
+              borderRadius: 24,
+              backgroundColor: "rgba(255,255,255,0.15)",
+              borderWidth: 1,
+              borderColor: "rgba(255,255,255,0.3)",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Ionicons name="chevron-forward" size={22} color="#fff" />
+          </View>
+        </TouchableOpacity>
+      </Animated.View>
 
     </View>
   );

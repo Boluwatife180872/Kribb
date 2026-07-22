@@ -114,7 +114,7 @@ export default function SignIn() {
         <TouchableOpacity
           onPress={onVerifyPress}
           disabled={isLoading}
-          className="w-full bg-blue-600 py-4 rounded-xl items-center mb-4"
+          className="w-full bg-teal-700 py-4 rounded-xl items-center mb-4"
         >
           {isLoading ? (
             <ActivityIndicator color="white" />
@@ -127,7 +127,7 @@ export default function SignIn() {
           onPress={() => signIn.mfa.sendEmailCode()}
           className="py-2"
         >
-          <Text className="text-blue-600">I need a new code</Text>
+          <Text className="text-teal-700">I need a new code</Text>
         </TouchableOpacity>
       </View>
     );
@@ -195,7 +195,7 @@ export default function SignIn() {
           <TouchableOpacity
             onPress={onSignInPress}
             disabled={isLoading}
-            className="w-full bg-blue-600 py-4 rounded-xl items-center mb-4"
+            className="w-full bg-teal-700 py-4 rounded-xl items-center mb-4"
           >
             {isLoading ? (
               <ActivityIndicator color="white" />
@@ -207,7 +207,7 @@ export default function SignIn() {
           <View className="flex-row justify-center">
             <Text className="text-gray-500">Don&apos;t have an account? </Text>
             <TouchableOpacity onPress={() => (router as any).push("/onboarding")}>
-              <Text className="text-blue-600 font-semibold">Sign Up</Text>
+              <Text className="text-teal-700 font-semibold">Sign Up</Text>
             </TouchableOpacity>
           </View>
         </View>

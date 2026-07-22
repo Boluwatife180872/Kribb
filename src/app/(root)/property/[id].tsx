@@ -106,7 +106,7 @@ export default function PropertyDetails() {
   if (loading) {
     return (
       <View className="flex-1 items-center justify-center bg-white">
-        <ActivityIndicator size="large" color="#2563EB" />
+        <ActivityIndicator size="large" color="#0F766E" />
       </View>
     );
   }
@@ -196,8 +196,8 @@ export default function PropertyDetails() {
         >
           {/* Badges */}
           <View className="flex-row gap-2 mb-3 flex-wrap">
-            <View className="bg-blue-50 px-3 py-1 rounded-full">
-              <Text className="text-blue-600 text-xs font-semibold capitalize">
+            <View className="bg-teal-50 px-3 py-1 rounded-full">
+              <Text className="text-teal-700 text-xs font-semibold capitalize">
                 {property.type}
               </Text>
             </View>
@@ -219,7 +219,7 @@ export default function PropertyDetails() {
           <Text className="text-2xl font-bold text-gray-900 mb-1">
             {property.title}
           </Text>
-          <Text className="text-blue-600 text-xl font-bold mb-4">
+          <Text className="text-teal-700 text-xl font-bold mb-4">
             {formatPrice(property.price)}
           </Text>
 
@@ -252,7 +252,7 @@ export default function PropertyDetails() {
           </Text>
           {isLongDesc && (
             <TouchableOpacity onPress={() => setExpanded(!expanded)}>
-              <Text className="text-blue-600 text-sm font-medium mb-5">
+              <Text className="text-teal-700 text-sm font-medium mb-5">
                 {expanded ? "Show less" : "Read more"}
               </Text>
             </TouchableOpacity>
@@ -376,7 +376,7 @@ function SpecItem({
 }) {
   return (
     <View className="items-center gap-1">
-      <Ionicons name={icon} size={20} color="#2563EB" />
+      <Ionicons name={icon} size={20} color="#0F766E" />
       <Text className="text-gray-900 font-bold text-sm">{value}</Text>
       <Text className="text-gray-400 text-xs">{label}</Text>
     </View>

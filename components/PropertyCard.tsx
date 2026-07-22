@@ -65,7 +65,7 @@ export default function PropertyCard({
         </View>
 
         <View className="flex-row items-center justify-between">
-          <Text className="text-blue-600 font-bold text-sm">
+          <Text className="text-teal-700 font-bold text-sm">
             {formatPrice(property.price)}
           </Text>
           {property.is_sold && (

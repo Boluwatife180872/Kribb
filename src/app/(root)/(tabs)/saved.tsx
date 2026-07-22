@@ -63,7 +63,7 @@ return (
 
       {loading ? (
         <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" color="#2563EB" />
+          <ActivityIndicator size="large" color="#0F766E" />
         </View>
       ) : (
         <FlatList
@@ -93,7 +93,7 @@ return (
               </Text>
               <TouchableOpacity
                 onPress={() => router.push("/(root)/(tabs)/search")}
-                className="mt-6 bg-blue-600 px-6 py-3 rounded-2xl"
+                className="mt-6 bg-teal-700 px-6 py-3 rounded-2xl"
               >
                 <Text className="text-white font-semibold">
                   Browse Properties

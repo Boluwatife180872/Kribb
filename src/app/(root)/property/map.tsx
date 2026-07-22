@@ -49,10 +49,10 @@ export default function MapScreen() {
           onPress={() =>
             Linking.openURL(`https://www.google.com/maps?q=${lat},${lng}`)
           }
-          className="flex-row items-center gap-1 bg-blue-50 px-3 py-2 rounded-full"
+          className="flex-row items-center gap-1 bg-teal-50 px-3 py-2 rounded-full"
         >
-          <Ionicons name="navigate-outline" size={14} color="#2563EB" />
-          <Text className="text-blue-600 text-xs font-semibold">
+          <Ionicons name="navigate-outline" size={14} color="#0F766E" />
+          <Text className="text-teal-700 text-xs font-semibold">
             Google Maps
           </Text>
         </TouchableOpacity>

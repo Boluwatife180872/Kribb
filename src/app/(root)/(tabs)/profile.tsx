@@ -80,7 +80,7 @@ export default function Profile() {
   if (!isLoaded || !user) {
     return (
       <SafeAreaView className="flex-1 bg-white items-center justify-center" edges={['top']}>
-        <ActivityIndicator size="large" color="#3B82F6" />
+        <ActivityIndicator size="large" color="#0F766E" />
       </SafeAreaView>
     );
   }
@@ -96,7 +96,7 @@ export default function Profile() {
           <TouchableOpacity
             onPress={handleUpdateProfileImage}
             disabled={isUpdating}
-            className="absolute bottom-3 right-0 bg-blue-600 rounded-full p-2"
+            className="absolute bottom-3 right-0 bg-teal-700 rounded-full p-2"
           >
             {isUpdating ? (
               <ActivityIndicator size="small" color="white" />

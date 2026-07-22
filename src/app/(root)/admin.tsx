@@ -92,7 +92,7 @@ export default function Admin() {
   if (loading) {
     return (
       <SafeAreaView className="flex-1 bg-white items-center justify-center">
-        <ActivityIndicator size="large" color="#3B82F6" />
+        <ActivityIndicator size="large" color="#0F766E" />
       </SafeAreaView>
     );
   }
@@ -118,8 +118,8 @@ export default function Admin() {
               </Text>
             </View>
           )}
-          <View className="bg-blue-50 px-2 py-0.5 rounded-full">
-            <Text className="text-blue-600 text-xs font-semibold capitalize">
+          <View className="bg-teal-50 px-2 py-0.5 rounded-full">
+            <Text className="text-teal-700 text-xs font-semibold capitalize">
               {item.type}
             </Text>
           </View>
@@ -130,7 +130,7 @@ export default function Admin() {
         >
           {item.title}
         </Text>
-        <Text className="text-blue-600 font-bold mb-3">
+        <Text className="text-teal-700 font-bold mb-3">
           {formatPrice(item.price)}
         </Text>
         <Text className="text-gray-400 text-xs mb-3">
@@ -139,10 +139,10 @@ export default function Admin() {
         <View className="flex-row gap-2">
           <TouchableOpacity
             onPress={() => handleEdit(item)}
-            className="flex-1 flex-row items-center justify-center gap-1 bg-blue-50 py-3 rounded-xl border border-blue-100"
+            className="flex-1 flex-row items-center justify-center gap-1 bg-teal-50 py-3 rounded-xl border border-teal-100"
           >
-            <Ionicons name="create-outline" size={16} color="#2563EB" />
-            <Text className="text-blue-600 font-semibold text-sm">Edit</Text>
+            <Ionicons name="create-outline" size={16} color="#0F766E" />
+            <Text className="text-teal-700 font-semibold text-sm">Edit</Text>
           </TouchableOpacity>
           {!item.is_sold && (
             <TouchableOpacity
