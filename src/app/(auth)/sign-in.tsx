@@ -1,5 +1,5 @@
 import { useSignIn } from "@clerk/expo";
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import {
@@ -206,9 +206,9 @@ export default function SignIn() {
 
           <View className="flex-row justify-center">
             <Text className="text-gray-500">Don&apos;t have an account? </Text>
-            <Link href="/sign-up">
+            <TouchableOpacity onPress={() => (router as any).push("/onboarding")}>
               <Text className="text-blue-600 font-semibold">Sign Up</Text>
-            </Link>
+            </TouchableOpacity>
           </View>
         </View>
 
