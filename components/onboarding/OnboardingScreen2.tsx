@@ -1,5 +1,6 @@
 import { Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useTheme } from "../../lib/theme";
 import Animated, { FadeInUp } from "react-native-reanimated";
 
 interface Props {
@@ -26,8 +27,9 @@ const features = [
 ];
 
 export default function OnboardingScreen2({ fontsLoaded, onGetStarted }: Props) {
+  const { colors } = useTheme();
   return (
-    <View className="flex-1 bg-white justify-center px-8">
+    <View style={{ flex: 1, backgroundColor: colors.bg, justifyContent: "center", paddingHorizontal: 32 }}>
       <Animated.View
         entering={FadeInUp.duration(600).delay(200)}
         style={{ marginBottom: 48 }}
@@ -36,7 +38,7 @@ export default function OnboardingScreen2({ fontsLoaded, onGetStarted }: Props) 
           style={{
             fontFamily: fontsLoaded ? "JosefinSans_700Bold" : undefined,
             fontSize: 28,
-            color: "#134E4A",
+            color: colors.primaryDark,
             lineHeight: 34,
             letterSpacing: -0.3,
           }}
@@ -47,7 +49,7 @@ export default function OnboardingScreen2({ fontsLoaded, onGetStarted }: Props) 
           style={{
             fontFamily: fontsLoaded ? "JosefinSans_400Regular" : undefined,
             fontSize: 15,
-            color: "#6B7280",
+            color: colors.textSecondary,
             marginTop: 8,
             lineHeight: 21,
           }}
@@ -68,19 +70,19 @@ export default function OnboardingScreen2({ fontsLoaded, onGetStarted }: Props) 
                 width: 44,
                 height: 44,
                 borderRadius: 12,
-                backgroundColor: "#F0FDFA",
+                backgroundColor: colors.primaryLight,
                 justifyContent: "center",
                 alignItems: "center",
               }}
             >
-              <Ionicons name={item.icon} size={22} color="#0F766E" />
+              <Ionicons name={item.icon} size={22} color={colors.primary} />
             </View>
             <View style={{ flex: 1 }}>
               <Text
                 style={{
                   fontFamily: fontsLoaded ? "JosefinSans_700Bold" : undefined,
                   fontSize: 16,
-                  color: "#111827",
+                  color: colors.text,
                   marginBottom: 2,
                 }}
               >
@@ -90,7 +92,7 @@ export default function OnboardingScreen2({ fontsLoaded, onGetStarted }: Props) 
                 style={{
                   fontFamily: fontsLoaded ? "JosefinSans_400Regular" : undefined,
                   fontSize: 14,
-                  color: "#6B7280",
+                  color: colors.textSecondary,
                   lineHeight: 19,
                 }}
               >
@@ -110,10 +112,10 @@ export default function OnboardingScreen2({ fontsLoaded, onGetStarted }: Props) 
           activeOpacity={0.85}
           className="items-center"
           style={{
-            backgroundColor: "#0F766E",
+            backgroundColor: colors.primary,
             paddingVertical: 17,
             borderRadius: 14,
-            shadowColor: "#0F766E",
+            shadowColor: colors.primary,
             shadowOffset: { width: 0, height: 4 },
             shadowOpacity: 0.3,
             shadowRadius: 10,

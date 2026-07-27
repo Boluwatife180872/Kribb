@@ -1,0 +1,32 @@
+WHAT WAS DONE & HOW TO TEST IT
+
+Hello! Here is a simple, layman-terms explanation of the improvements made to your app (covering points 1, 2, 3, and 5 requested by you) and how you can test each of them.
+
+---
+
+### 1. Performance & Rendering Optimization
+* **What we did:** 
+  - Replaced standard React Native images with `expo-image`. This means property images now load lightning-fast because they are automatically cached on your device's memory and disk.
+  - Wrapped property cards in `React.memo` so that when you scroll or interact with the app, items that haven't changed don't needlessly re-render.
+* **How to test:** 
+  - Open the app and scroll up and down quickly through the Home screen or Search list. You will notice scrolling is much smoother, and property images load instantly once cached without flickering.
+
+### 2. Data Fetching & Caching (TanStack React Query)
+* **What we did:** 
+  - Integrated TanStack React Query (`@tanstack/react-query`) across the app. This acts smart about data: when properties are fetched, they are stored in a local cache. If you switch between tabs and come back, data appears instantly from the cache without showing loading spinners every single time, while automatically refreshing in the background.
+* **How to test:** 
+  - Load the Home feed, switch to the Search or Profile tab, and switch back to Home. The data loads instantly from the cache rather than refetching from scratch.
+
+### 3. State Management & Architecture (Persistence & Error Boundary)
+* **What we did:** 
+  - **Zustand Persistence:** Your search filters and notification settings are now automatically saved to your device storage (AsyncStorage). If you close the app and reopen it, your filters and preferences will still be remembered.
+  - **Error Boundary:** Added a global safety net. If any unexpected crash or rendering error happens anywhere in the app, instead of crashing to a white screen, a clean recovery screen appears with a "Try Again" button.
+* **How to test:** 
+  - Set some search filters in the Search tab or toggle notification settings in Profile, close the app completely (kill it), and reopen it. You will see your filters/settings are still saved.
+
+### 5. UI/UX Polish & Accessibility
+* **What we did:** 
+  - **Skeleton Loaders:** Created smooth animated placeholder skeletons (`SkeletonItem`) to replace boring or jarring loading spinners while data is being fetched.
+  - **Accessibility Labels:** Added screen-reader accessibility labels and roles (`accessibilityRole="button"`, `accessibilityLabel`) to buttons, property cards, and interactive icons so accessibility tools can easily describe them.
+* **How to test:** 
+  - Notice the polished shimmering placeholder shapes when content loads. You can also turn on your device's screen reader (TalkBack on Android / VoiceOver on iOS) and tap around property cards to hear them read aloud clearly.

@@ -3,9 +3,11 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
 import { Linking, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useTheme } from "../../../../lib/theme";
 import WebView from "react-native-webview";
 
 export default function MapScreen() {
+  const { colors } = useTheme();
   const { latitude, longitude, title, address } = useLocalSearchParams<{
     latitude: string;
     longitude: string;
@@ -23,24 +25,24 @@ export default function MapScreen() {
     lat + 0.001
   }&layer=mapnik&marker=${lat}%2C${lng}`;
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
       {/* Header */}
-      <View className="flex-row items-center justify-between px-4 py-3 border-b border-gray-100">
+      <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: colors.borderLight }}>
         <TouchableOpacity
           onPress={() => router.back()}
-          className="w-9 h-9 items-center justify-center rounded-full bg-gray-100"
+          style={{ width: 36, height: 36, alignItems: "center", justifyContent: "center", borderRadius: 18, backgroundColor: colors.surfaceAlt }}
         >
-          <Ionicons name="arrow-back" size={20} color="#111827" />
+          <Ionicons name="arrow-back" size={20} color={colors.text} />
         </TouchableOpacity>
 
-        <View className="flex-1 mx-3">
+        <View style={{ flex: 1, marginHorizontal: 12 }}>
           <Text
-            className="text-gray-900 font-semibold text-sm"
+            style={{ color: colors.text, fontWeight: "600", fontSize: 13 }}
             numberOfLines={1}
           >
             {title}
           </Text>
-          <Text className="text-gray-400 text-xs" numberOfLines={1}>
+          <Text style={{ color: colors.textMuted, fontSize: 12 }} numberOfLines={1}>
             {address}
           </Text>
         </View>
@@ -49,10 +51,10 @@ export default function MapScreen() {
           onPress={() =>
             Linking.openURL(`https://www.google.com/maps?q=${lat},${lng}`)
           }
-          className="flex-row items-center gap-1 bg-teal-50 px-3 py-2 rounded-full"
+          style={{ flexDirection: "row", alignItems: "center", gap: 4, backgroundColor: colors.primaryLight, paddingHorizontal: 12, paddingVertical: 8, borderRadius: 999 }}
         >
-          <Ionicons name="navigate-outline" size={14} color="#0F766E" />
-          <Text className="text-teal-700 text-xs font-semibold">
+          <Ionicons name="navigate-outline" size={14} color={colors.primary} />
+          <Text style={{ color: colors.primary, fontSize: 12, fontWeight: "600" }}>
             Google Maps
           </Text>
         </TouchableOpacity>

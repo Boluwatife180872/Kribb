@@ -12,6 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 import { useAuth } from "@clerk/expo";
+import { useTheme } from "../../../lib/theme";
 import { useSupabase } from "../../../hooks/useSupabase";
 import { useNotificationStore } from "../../../store/notificationStore";
 
@@ -26,6 +27,7 @@ Notifications.setNotificationHandler({
 });
 
 export default function NotificationsScreen() {
+  const { colors } = useTheme();
   const router = useRouter();
   const { userId } = useAuth();
   const authSupabase = useSupabase();
@@ -105,13 +107,13 @@ export default function NotificationsScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white" edges={["top"]}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }} edges={["top"]}>
       <View className="px-5 pt-4 pb-3">
         <View className="flex-row items-center gap-3">
-          <TouchableOpacity onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="#111827" />
+          <TouchableOpacity onPress={() => router.replace("/(root)/(tabs)/profile")}>
+            <Ionicons name="arrow-back" size={24} color={colors.text} />
           </TouchableOpacity>
-          <Text className="text-2xl font-bold text-gray-900">
+          <Text style={{ fontSize: 24, fontWeight: "bold", color: colors.text }}>
             Notifications
           </Text>
         </View>
@@ -121,31 +123,46 @@ export default function NotificationsScreen() {
         <TouchableOpacity
           onPress={handleToggle}
           disabled={registering}
-          className="flex-row items-center justify-between bg-gray-50 px-4 py-4 rounded-2xl"
+          style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", backgroundColor: colors.surface, paddingHorizontal: 16, paddingVertical: 16, borderRadius: 16 }}
         >
-          <View className="flex-1 mr-3">
-            <Text className="text-gray-700 font-semibold text-base">
+          <View style={{ flex: 1, marginRight: 12 }}>
+            <Text style={{ color: colors.textSecondary, fontWeight: "600", fontSize: 16 }}>
               New Listing Alerts
             </Text>
-            <Text className="text-gray-400 text-sm mt-0.5">
+            <Text style={{ color: colors.textMuted, fontSize: 13, marginTop: 2 }}>
               Get notified when a new property is listed
             </Text>
           </View>
           <View
-            className={`w-12 h-7 rounded-full justify-center px-0.5 ${
-              newListingNotifications ? "bg-teal-700" : "bg-gray-300"
-            } ${registering ? "opacity-50" : ""}`}
+            style={{
+              width: 48,
+              height: 28,
+              borderRadius: 14,
+              justifyContent: "center",
+              paddingHorizontal: 2,
+              backgroundColor: newListingNotifications ? colors.primary : colors.border,
+              opacity: registering ? 0.5 : 1,
+            }}
           >
             <View
-              className={`w-6 h-6 rounded-full bg-white shadow-sm ${
-                newListingNotifications ? "self-end" : "self-start"
-              }`}
+              style={{
+                width: 24,
+                height: 24,
+                borderRadius: 12,
+                backgroundColor: "#fff",
+                alignSelf: newListingNotifications ? "flex-end" : "flex-start",
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 1 },
+                shadowOpacity: 0.1,
+                shadowRadius: 2,
+                elevation: 2,
+              }}
             />
           </View>
         </TouchableOpacity>
 
         {expoPushToken && (
-          <Text className="text-gray-400 text-xs mt-3 text-center">
+          <Text style={{ color: colors.textMuted, fontSize: 12, marginTop: 12, textAlign: "center" }}>
             Notifications are enabled
           </Text>
         )}

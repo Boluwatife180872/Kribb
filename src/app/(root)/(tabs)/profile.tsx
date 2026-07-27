@@ -8,12 +8,14 @@ import {
   Alert,
   Image,
   Linking,
+  Switch,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useUserStore } from "../../../../store/userStore";
+import { useTheme } from "../../../../lib/theme";
 
 export default function Profile() {
   const router = useRouter();
@@ -21,6 +23,7 @@ export default function Profile() {
   const { signOut } = useAuth();
   const isAdmin = useUserStore((state) => state.isAdmin);
   const [isUpdating, setIsUpdating] = useState(false);
+  const { colors, isDark, toggleTheme } = useTheme();
 
   const handleSignOut = async () => {
     try {
@@ -79,14 +82,14 @@ export default function Profile() {
 
   if (!isLoaded || !user) {
     return (
-      <SafeAreaView className="flex-1 bg-white items-center justify-center" edges={['top']}>
-        <ActivityIndicator size="large" color="#0F766E" />
+      <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }} edges={['top']}>
+        <ActivityIndicator size="large" color={colors.primary} />
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-white" edges={['top']}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }} edges={['top']}>
       <View className="items-center py-8">
         <View>
           <Image
@@ -96,7 +99,8 @@ export default function Profile() {
           <TouchableOpacity
             onPress={handleUpdateProfileImage}
             disabled={isUpdating}
-            className="absolute bottom-3 right-0 bg-teal-700 rounded-full p-2"
+            style={{ backgroundColor: colors.primary }}
+            className="absolute bottom-3 right-0 rounded-full p-2"
           >
             {isUpdating ? (
               <ActivityIndicator size="small" color="white" />
@@ -106,37 +110,47 @@ export default function Profile() {
           </TouchableOpacity>
         </View>
 
-        <Text className="text-xl font-bold text-gray-800">
+        <Text style={{ color: colors.text }} className="text-xl font-bold">
           {user.firstName} {user.lastName}
         </Text>
-        <Text className="text-gray-500 mt-1">
+        <Text style={{ color: colors.textMuted }} className="mt-1">
           {user.emailAddresses[0].emailAddress}
         </Text>
       </View>
 
-      {/* Menu Items */}
       <View className="px-6 gap-2">
         <MenuItem
           icon="heart-outline"
           label="Saved Properties"
           onPress={() => router.push("/(root)/(tabs)/saved")}
+          colors={colors}
         />
         {isAdmin && (
           <MenuItem
             icon="shield-checkmark-outline"
             label="Manage Listings"
             onPress={() => router.push("/(root)/admin")}
+            colors={colors}
           />
         )}
         <MenuItem
           icon="notifications-outline"
           label="Notifications"
           onPress={() => router.push("/(root)/notifications")}
+          colors={colors}
         />
         <MenuItem
-          icon="settings-outline"
-          label="Settings"
-          onPress={() => Alert.alert("Coming Soon", "Settings coming soon!")}
+          icon={isDark ? "moon-outline" : "sunny-outline"}
+          label="Dark Mode"
+          colors={colors}
+          rightElement={
+            <Switch
+              value={isDark}
+              onValueChange={toggleTheme}
+              trackColor={{ false: "#D1D5DB", true: colors.primary }}
+              thumbColor="#fff"
+            />
+          }
         />
         <MenuItem
           icon="help-circle-outline"
@@ -146,17 +160,21 @@ export default function Profile() {
               "mailto:bolu.onukwu@gmail.com?subject=Help%20%26%20Support%20-%20Kribb%20App",
             )
           }
+          colors={colors}
         />
       </View>
 
-      {/* Sign Out */}
       <View className="px-6 mt-auto mb-8">
         <TouchableOpacity
           onPress={handleSignOut}
-          className="flex-row items-center justify-center gap-2 bg-red-50 py-4 rounded-2xl border border-red-100"
+          style={{
+            backgroundColor: colors.dangerLight,
+            borderColor: colors.dangerLight,
+          }}
+          className="flex-row items-center justify-center gap-2 py-4 rounded-2xl border"
         >
-          <Ionicons name="log-out-outline" size={20} color="#EF4444" />
-          <Text className="text-red-500 font-semibold text-base">Sign Out</Text>
+          <Ionicons name="log-out-outline" size={20} color={colors.danger} />
+          <Text style={{ color: colors.danger }} className="font-semibold text-base">Sign Out</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -167,21 +185,27 @@ function MenuItem({
   icon,
   label,
   onPress,
+  colors,
+  rightElement,
 }: {
   icon: keyof typeof Ionicons.glyphMap;
   label: string;
   onPress?: () => void;
+  colors: any;
+  rightElement?: React.ReactNode;
 }) {
   return (
     <TouchableOpacity
       onPress={onPress}
-      className="flex-row items-center gap-4 bg-gray-50 px-4 py-4 rounded-2xl"
+      disabled={!onPress}
+      style={{ backgroundColor: colors.surface }}
+      className="flex-row items-center gap-4 px-4 py-4 rounded-2xl"
     >
-      <Ionicons name={icon} size={22} color="#6B7280" />
-      <Text className="flex-1 text-gray-700 font-medium text-base">
+      <Ionicons name={icon} size={22} color={colors.textMuted} />
+      <Text style={{ color: colors.textSecondary }} className="flex-1 font-medium text-base">
         {label}
       </Text>
-      <Ionicons name="chevron-forward" size={18} color="#D1D5DB" />
+      {rightElement || <Ionicons name="chevron-forward" size={18} color={colors.border} />}
     </TouchableOpacity>
   );
 }

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Image, Text, TouchableOpacity, View, useWindowDimensions } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import { useTheme } from "../../lib/theme";
 import Animated, { FadeInDown, useSharedValue, withRepeat, withTiming, useAnimatedStyle, Easing } from "react-native-reanimated";
 
 interface Props {
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export default function OnboardingScreen1({ fontsLoaded, onAdvance }: Props) {
+  const { colors } = useTheme();
   const { width, height } = useWindowDimensions();
   const bounce = useSharedValue(0);
 
@@ -26,9 +28,9 @@ export default function OnboardingScreen1({ fontsLoaded, onAdvance }: Props) {
   }));
 
   return (
-    <View className="flex-1 bg-white">
+    <View style={{ flex: 1, backgroundColor: colors.bg }}>
       <Image
-        source={require("../../assets/images/house1.jpg")}
+        source={require("../../assets/images/house7.jpg")}
         style={{ position: "absolute", top: 0, left: 0, width, height }}
         resizeMode="cover"
       />

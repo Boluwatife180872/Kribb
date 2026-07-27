@@ -1,5 +1,5 @@
 import { useAuth, useSignUp } from "@clerk/expo";
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import {
@@ -13,11 +13,13 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
+import { useTheme } from "../../../lib/theme";
 
 export default function SignUp() {
   const { signUp, errors, fetchStatus } = useSignUp();
   const { isSignedIn } = useAuth();
   const router = useRouter();
+  const { colors, isDark } = useTheme();
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -32,6 +34,10 @@ export default function SignUp() {
   if (signUp.status === "complete" || isSignedIn) {
     return null;
   }
+
+  const logoSrc = isDark
+    ? require("../../../assets/images/main-plazly-black1.png")
+    : require("../../../assets/images/main-plazly.png");
 
   const onSignUpPress = async () => {
     const { error } = await signUp.password({
@@ -70,29 +76,29 @@ export default function SignUp() {
     signUp.missingFields.length === 0
   ) {
     return (
-      <View className="flex-1 justify-center items-center bg-white px-6">
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: colors.bg, paddingHorizontal: 24 }}>
         <Image
-          source={require("../../../assets/images/main-plazly.png")}
-          className="w-32 h-16 mb-8"
+          source={logoSrc}
+          style={{ width: 128, height: 64, marginBottom: 32 }}
           resizeMode="contain"
         />
-        <Text className="text-2xl font-bold text-gray-800 mb-2">
+        <Text style={{ fontSize: 24, fontWeight: "bold", color: colors.text, marginBottom: 8 }}>
           Verify your account
         </Text>
-        <Text className="text-gray-500 mb-8 text-center">
+        <Text style={{ color: colors.textMuted, marginBottom: 32, textAlign: "center" }}>
           We sent a code to {email}
         </Text>
 
         <TextInput
-          className="w-full border border-gray-300 rounded-xl px-4 py-3 mb-4"
+          style={{ width: "100%", borderWidth: 1, borderColor: colors.border, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 12, marginBottom: 16, color: colors.text }}
           placeholder="Enter verification code"
-          placeholderTextColor="#9CA3AF"
+          placeholderTextColor={colors.textMuted}
           keyboardType="number-pad"
           value={code}
           onChangeText={setCode}
         />
         {errors.fields.code && (
-          <Text className="text-red-500 mb-4">
+          <Text style={{ color: colors.danger, marginBottom: 16 }}>
             {errors.fields.code.message}
           </Text>
         )}
@@ -100,24 +106,21 @@ export default function SignUp() {
         <TouchableOpacity
           onPress={onVerifyPress}
           disabled={isLoading}
-          className="w-full bg-teal-700 py-4 rounded-xl items-center mb-4"
+          style={{ width: "100%", backgroundColor: colors.primary, paddingVertical: 16, borderRadius: 12, alignItems: "center", marginBottom: 16 }}
         >
           {isLoading ? (
             <ActivityIndicator color="white" />
           ) : (
-            <Text className="text-white font-bold text-base">Verify</Text>
+            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 16 }}>Verify</Text>
           )}
         </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={() => signUp.verifications.sendEmailCode()}
-          className="py-2"
-        >
-          <Text className="text-teal-700">I need a new code</Text>
+        <TouchableOpacity onPress={() => signUp.verifications.sendEmailCode()} style={{ paddingVertical: 8 }}>
+          <Text style={{ color: colors.primary }}>I need a new code</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => signUp.reset()} className="py-2">
-          <Text className="text-teal-700">Start over</Text>
+        <TouchableOpacity onPress={() => signUp.reset()} style={{ paddingVertical: 8 }}>
+          <Text style={{ color: colors.primary }}>Start over</Text>
         </TouchableOpacity>
       </View>
     );
@@ -125,36 +128,36 @@ export default function SignUp() {
 
   return (
     <ScrollView
-      className="bg-white"
+      style={{ backgroundColor: colors.bg }}
       keyboardShouldPersistTaps="handled"
       contentContainerStyle={{ flexGrow: 1 }}
     >
-      <View className="px-6 py-12 justify-between" style={{ minHeight: height }}>
-        <View className="flex-1 justify-center w-full">
+      <View style={{ paddingHorizontal: 24, paddingVertical: 48, justifyContent: "space-between", minHeight: height }}>
+        <View style={{ flex: 1, justifyContent: "center", width: "100%" }}>
           <Image
-            source={require("../../../assets/images/main-plazly.png")}
-            className="w-32 h-16 mb-8"
+            source={logoSrc}
+            style={{ width: 128, height: 64, marginBottom: 32 }}
             resizeMode="contain"
           />
-          <Text className="text-3xl font-bold text-gray-800 mb-2">
+          <Text style={{ fontSize: 30, fontWeight: "bold", color: colors.text, marginBottom: 8 }}>
             Create account
           </Text>
-          <Text className="text-gray-500 mb-8">Find your dream home today</Text>
+          <Text style={{ color: colors.textMuted, marginBottom: 32 }}>Find your dream home today</Text>
 
-          <View className="flex-row gap-3 mb-4">
+          <View style={{ flexDirection: "row", gap: 12, marginBottom: 16 }}>
             <TextInput
-              className="flex-1 border border-gray-300 rounded-xl px-4 py-3"
+              style={{ flex: 1, borderWidth: 1, borderColor: colors.border, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 12, color: colors.text }}
               placeholder="First name"
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={colors.textMuted}
               value={firstName}
               onChangeText={setFirstName}
               autoCapitalize="words"
             />
 
             <TextInput
-              className="flex-1 border border-gray-300 rounded-xl px-4 py-3"
+              style={{ flex: 1, borderWidth: 1, borderColor: colors.border, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 12, color: colors.text }}
               placeholder="Last name"
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={colors.textMuted}
               value={lastName}
               onChangeText={setLastName}
               autoCapitalize="words"
@@ -162,42 +165,42 @@ export default function SignUp() {
           </View>
 
           <TextInput
-            className="w-full border border-gray-300 rounded-xl px-4 py-3 mb-4"
+            style={{ width: "100%", borderWidth: 1, borderColor: colors.border, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 12, marginBottom: 16, color: colors.text }}
             placeholder="Email address"
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={colors.textMuted}
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
             autoCapitalize="none"
           />
           {errors.fields.emailAddress && (
-            <Text className="text-red-500 mb-4">
+            <Text style={{ color: colors.danger, marginBottom: 16 }}>
               {errors.fields.emailAddress.message}
             </Text>
           )}
 
-          <View className="relative w-full mb-6">
+          <View style={{ width: "100%", marginBottom: 24, position: "relative" }}>
             <TextInput
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 pr-12 text-black"
+              style={{ width: "100%", borderWidth: 1, borderColor: colors.border, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 12, paddingRight: 48, color: colors.text }}
               placeholder="Password"
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={colors.textMuted}
               value={password}
               onChangeText={setPassword}
               secureTextEntry={!showPassword}
             />
             <TouchableOpacity
               onPress={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2"
+              style={{ position: "absolute", right: 12, top: 0, bottom: 0, justifyContent: "center" }}
             >
               <Ionicons
                 name={showPassword ? "eye-off-outline" : "eye-outline"}
                 size={22}
-                color="#6B7280"
+                color={colors.textMuted}
               />
             </TouchableOpacity>
           </View>
           {errors.fields.password && (
-            <Text className="text-red-500 mb-4">
+            <Text style={{ color: colors.danger, marginBottom: 16 }}>
               {errors.fields.password.message}
             </Text>
           )}
@@ -205,20 +208,20 @@ export default function SignUp() {
           <TouchableOpacity
             onPress={onSignUpPress}
             disabled={isLoading}
-            className="w-full bg-teal-700 py-4 rounded-xl items-center mb-4"
+            style={{ width: "100%", backgroundColor: colors.primary, paddingVertical: 16, borderRadius: 12, alignItems: "center", marginBottom: 16 }}
           >
             {isLoading ? (
               <ActivityIndicator color="white" />
             ) : (
-              <Text className="text-white font-bold text-base">Sign Up</Text>
+              <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 16 }}>Sign Up</Text>
             )}
           </TouchableOpacity>
 
-          <View className="flex-row justify-center">
-            <Text className="text-gray-500">Already have an account? </Text>
-            <Link href="/sign-in">
-              <Text className="text-teal-700 font-semibold">Sign In</Text>
-            </Link>
+          <View style={{ flexDirection: "row", justifyContent: "center" }}>
+            <Text style={{ color: colors.textMuted }}>Already have an account? </Text>
+            <TouchableOpacity onPress={() => router.push("/sign-in")}>
+              <Text style={{ color: colors.primary, fontWeight: "600" }}>Sign In</Text>
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -226,8 +229,11 @@ export default function SignUp() {
           style={{
             fontFamily: Platform.select({ ios: "Georgia", android: "serif" }),
             fontStyle: "italic",
+            textAlign: "center",
+            color: colors.text,
+            fontSize: 16,
+            marginTop: 32,
           }}
-          className="text-center text-gray-900 text-base mt-8"
         >
           Your Property Marketplace
         </Text>

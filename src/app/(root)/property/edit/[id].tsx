@@ -15,6 +15,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useTheme } from "../../../../../lib/theme";
 import { useSupabase } from "../../../../../hooks/useSupabase";
 import { supabase } from "../../../../../lib/supabase";
 import { useUserStore } from "../../../../../store/userStore";
@@ -26,9 +27,6 @@ type PropertyType = (typeof TYPES)[number];
 const MIN_PRICE = 1;
 const MAX_PRICE = 999_999_999;
 
-const inputClass =
-  "bg-white border border-gray-200 rounded-2xl px-4 py-3 text-gray-800";
-const labelClass = "text-sm font-semibold text-gray-700 mb-1.5";
 const sectionClass = "mb-5";
 
 interface FormState {
@@ -49,6 +47,7 @@ interface FormState {
 }
 
 export default function EditProperty() {
+  const { colors } = useTheme();
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const authSupabase = useSupabase();
@@ -269,20 +268,20 @@ export default function EditProperty() {
 
   if (loading) {
     return (
-      <SafeAreaView className="flex-1 bg-white items-center justify-center">
-        <ActivityIndicator size="large" color="#0F766E" />
+      <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg, alignItems: "center", justifyContent: "center" }}>
+        <ActivityIndicator size="large" color={colors.primary} />
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }} edges={["top"]}>
       <KeyboardAvoidingView>
         <View className="flex-row items-center px-5 pt-4 pb-3 gap-3">
           <TouchableOpacity onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="#111827" />
+            <Ionicons name="arrow-back" size={24} color={colors.text} />
           </TouchableOpacity>
-          <Text className="text-2xl font-bold text-gray-900 flex-1">
+          <Text style={{ fontSize: 24, fontWeight: "bold", color: colors.text, flex: 1 }}>
             Edit Property
           </Text>
         </View>
@@ -293,9 +292,9 @@ export default function EditProperty() {
           keyboardShouldPersistTaps="handled"
         >
           <View className={sectionClass}>
-            <Text className={labelClass}>
+            <Text style={{ fontSize: 13, fontWeight: "600", color: colors.textSecondary, marginBottom: 6 }}>
               Photos{" "}
-              <Text className="text-gray-400 font-normal">(up to 6)</Text>
+              <Text style={{ color: colors.textMuted, fontWeight: "400" }}>(up to 6)</Text>
             </Text>
 
             <View className="flex-row flex-wrap gap-3">
@@ -307,15 +306,15 @@ export default function EditProperty() {
                     resizeMode="cover"
                   />
                   {index === 0 && (
-                    <View className="absolute top-1 left-1 bg-teal-700 px-1.5 py-0.5 rounded-full">
-                      <Text className="text-white text-[9px] font-bold">
+                    <View style={{ position: "absolute", top: 4, left: 4, backgroundColor: colors.primary, paddingHorizontal: 6, paddingVertical: 2, borderRadius: 999 }}>
+                      <Text style={{ color: "#fff", fontSize: 9, fontWeight: "bold" }}>
                         COVER
                       </Text>
                     </View>
                   )}
                   <TouchableOpacity
                     onPress={() => handleRemoveImage(index)}
-                    className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 rounded-full items-center justify-center"
+                    style={{ position: "absolute", top: -8, right: -8, width: 20, height: 20, backgroundColor: colors.danger, borderRadius: 10, alignItems: "center", justifyContent: "center" }}
                   >
                     <Ionicons name="close" size={11} color="white" />
                   </TouchableOpacity>
@@ -326,18 +325,18 @@ export default function EditProperty() {
                 <TouchableOpacity
                   onPress={handlePickImages}
                   disabled={uploadingImages}
-                  className="w-24 h-24 rounded-2xl bg-white border-2 border-dashed border-gray-300 items-center justify-center"
+                  style={{ width: 96, height: 96, borderRadius: 16, backgroundColor: colors.card, borderWidth: 2, borderStyle: "dashed", borderColor: colors.border, alignItems: "center", justifyContent: "center" }}
                 >
                   {uploadingImages ? (
-                    <ActivityIndicator size="small" color="#0F766E" />
+                    <ActivityIndicator size="small" color={colors.primary} />
                   ) : (
                     <>
                       <Ionicons
                         name="camera-outline"
                         size={22}
-                        color="#9CA3AF"
+                        color={colors.textMuted}
                       />
-                      <Text className="text-gray-400 text-xs mt-1">Add</Text>
+                      <Text style={{ color: colors.textMuted, fontSize: 12, marginTop: 4 }}>Add</Text>
                     </>
                   )}
                 </TouchableOpacity>
@@ -346,22 +345,22 @@ export default function EditProperty() {
           </View>
 
           <View className={sectionClass}>
-            <Text className={labelClass}>Title</Text>
+            <Text style={{ fontSize: 13, fontWeight: "600", color: colors.textSecondary, marginBottom: 6 }}>Title</Text>
             <TextInput
-              className={inputClass}
+              style={{ backgroundColor: colors.inputBg, borderWidth: 1, borderColor: colors.border, borderRadius: 16, paddingHorizontal: 16, paddingVertical: 12, color: colors.text }}
               placeholder="e.g. Modern 3BHK in Bandra"
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={colors.textMuted}
               value={form.title}
               onChangeText={(v) => updateForm({ title: v })}
             />
           </View>
 
           <View className={sectionClass}>
-            <Text className={labelClass}>Description</Text>
+            <Text style={{ fontSize: 13, fontWeight: "600", color: colors.textSecondary, marginBottom: 6 }}>Description</Text>
             <TextInput
-              className={`${inputClass} h-24`}
+              style={{ backgroundColor: colors.inputBg, borderWidth: 1, borderColor: colors.border, borderRadius: 16, paddingHorizontal: 16, paddingVertical: 12, color: colors.text, height: 96 }}
               placeholder="Describe the property..."
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={colors.textMuted}
               value={form.description}
               onChangeText={(v) => updateForm({ description: v })}
               multiline
@@ -370,52 +369,58 @@ export default function EditProperty() {
           </View>
 
           <View className={sectionClass}>
-            <Text className={labelClass}>Price (₦)</Text>
+            <Text style={{ fontSize: 13, fontWeight: "600", color: colors.textSecondary, marginBottom: 6 }}>Price (₦)</Text>
             <TextInput
-              className={inputClass}
+              style={{ backgroundColor: colors.inputBg, borderWidth: 1, borderColor: colors.border, borderRadius: 16, paddingHorizontal: 16, paddingVertical: 12, color: colors.text }}
               placeholder="e.g. 5000000"
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={colors.textMuted}
               value={form.price}
               onChangeText={(v) => updateForm({ price: v })}
               keyboardType="numeric"
             />
-            <Text className="text-xs text-gray-400 mt-1.5 ml-1">
+            <Text style={{ fontSize: 12, color: colors.textMuted, marginTop: 6, marginLeft: 4 }}>
               Valid range: ₦1 – ₦{MAX_PRICE.toLocaleString("en-NG")}
             </Text>
           </View>
 
           <View className={sectionClass}>
-            <Text className={labelClass}>Property Type</Text>
+            <Text style={{ fontSize: 13, fontWeight: "600", color: colors.textSecondary, marginBottom: 6 }}>Property Type</Text>
             <View className="flex-row flex-wrap gap-2">
-              {TYPES.map((t) => (
-                <TouchableOpacity
-                  key={t}
-                  onPress={() => updateForm({ type: t })}
-                  className={`px-4 py-2 rounded-full border ${
-                    form.type === t
-                      ? "bg-teal-700 border-teal-700"
-                      : "bg-white border-gray-200"
-                  }`}
-                >
-                  <Text
-                    className={`text-sm font-semibold capitalize ${
-                      form.type === t ? "text-white" : "text-gray-600"
-                    }`}
+              {TYPES.map((t) => {
+                const active = form.type === t;
+                return (
+                  <TouchableOpacity
+                    key={t}
+                    onPress={() => updateForm({ type: t })}
+                    style={{
+                      paddingHorizontal: 16,
+                      paddingVertical: 8,
+                      borderRadius: 999,
+                      borderWidth: 1,
+                      borderColor: active ? colors.primary : colors.border,
+                      backgroundColor: active ? colors.primary : colors.card,
+                    }}
                   >
-                    {t}
-                  </Text>
-                </TouchableOpacity>
-              ))}
+                    <Text
+                      style={{ fontSize: 13, fontWeight: "600", textTransform: "capitalize", color: active ? "#fff" : colors.textSecondary }}
+                    >
+                      {t}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
             </View>
           </View>
 
           <View className="flex-row gap-4 mb-5">
             <Counter
+              colors={colors}
               label="Bedrooms"
               value={form.bedrooms}
               onChange={(v) => updateForm({ bedrooms: v })}
             />
             <Counter
+              colors={colors}
               label="Bathrooms"
               value={form.bathrooms}
               onChange={(v) => updateForm({ bathrooms: v })}
@@ -423,11 +428,11 @@ export default function EditProperty() {
           </View>
 
           <View className={sectionClass}>
-            <Text className={labelClass}>Area (sq ft)</Text>
+            <Text style={{ fontSize: 13, fontWeight: "600", color: colors.textSecondary, marginBottom: 6 }}>Area (sq ft)</Text>
             <TextInput
-              className={inputClass}
+              style={{ backgroundColor: colors.inputBg, borderWidth: 1, borderColor: colors.border, borderRadius: 16, paddingHorizontal: 16, paddingVertical: 12, color: colors.text }}
               placeholder="e.g. 1200"
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={colors.textMuted}
               value={form.areaSqft}
               onChangeText={(v) => updateForm({ areaSqft: v })}
               keyboardType="numeric"
@@ -435,22 +440,22 @@ export default function EditProperty() {
           </View>
 
           <View className={sectionClass}>
-            <Text className={labelClass}>Address</Text>
+            <Text style={{ fontSize: 13, fontWeight: "600", color: colors.textSecondary, marginBottom: 6 }}>Address</Text>
             <TextInput
-              className={inputClass}
+              style={{ backgroundColor: colors.inputBg, borderWidth: 1, borderColor: colors.border, borderRadius: 16, paddingHorizontal: 16, paddingVertical: 12, color: colors.text }}
               placeholder="Street address"
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={colors.textMuted}
               value={form.address}
               onChangeText={(v) => updateForm({ address: v })}
             />
           </View>
 
           <View className={sectionClass}>
-            <Text className={labelClass}>City</Text>
+            <Text style={{ fontSize: 13, fontWeight: "600", color: colors.textSecondary, marginBottom: 6 }}>City</Text>
             <TextInput
-              className={inputClass}
+              style={{ backgroundColor: colors.inputBg, borderWidth: 1, borderColor: colors.border, borderRadius: 16, paddingHorizontal: 16, paddingVertical: 12, color: colors.text }}
               placeholder="e.g. Mumbai"
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={colors.textMuted}
               value={form.city}
               onChangeText={(v) => updateForm({ city: v })}
             />
@@ -458,18 +463,18 @@ export default function EditProperty() {
 
           <View className={sectionClass}>
             <View className="flex-row items-center justify-between mb-1.5">
-              <Text className={labelClass}>Coordinates</Text>
+              <Text style={{ fontSize: 13, fontWeight: "600", color: colors.textSecondary, marginBottom: 0 }}>Coordinates</Text>
               <TouchableOpacity
                 onPress={handleDetectLocation}
                 disabled={detectingLocation}
-                className="flex-row items-center gap-1 bg-teal-50 px-3 py-1.5 rounded-full"
+                style={{ flexDirection: "row", alignItems: "center", gap: 4, backgroundColor: colors.primaryLight, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 999 }}
               >
                 {detectingLocation ? (
-                  <ActivityIndicator size="small" color="#0F766E" />
+                  <ActivityIndicator size="small" color={colors.primary} />
                 ) : (
-                  <Ionicons name="locate-outline" size={13} color="#0F766E" />
+                  <Ionicons name="locate-outline" size={13} color={colors.primary} />
                 )}
-                <Text className="text-teal-700 text-xs font-semibold">
+                <Text style={{ color: colors.primary, fontSize: 12, fontWeight: "600" }}>
                   {detectingLocation ? "Detecting..." : "Detect Location"}
                 </Text>
               </TouchableOpacity>
@@ -478,9 +483,9 @@ export default function EditProperty() {
             <View className="flex-row gap-3">
               <View className="flex-1">
                 <TextInput
-                  className={inputClass}
+                  style={{ backgroundColor: colors.inputBg, borderWidth: 1, borderColor: colors.border, borderRadius: 16, paddingHorizontal: 16, paddingVertical: 12, color: colors.text }}
                   placeholder="Latitude"
-                  placeholderTextColor="#9CA3AF"
+                  placeholderTextColor={colors.textMuted}
                   value={form.latitude}
                   onChangeText={(v) => updateForm({ latitude: v })}
                   keyboardType="numeric"
@@ -488,9 +493,9 @@ export default function EditProperty() {
               </View>
               <View className="flex-1">
                 <TextInput
-                  className={inputClass}
+                  style={{ backgroundColor: colors.inputBg, borderWidth: 1, borderColor: colors.border, borderRadius: 16, paddingHorizontal: 16, paddingVertical: 12, color: colors.text }}
                   placeholder="Longitude"
-                  placeholderTextColor="#9CA3AF"
+                  placeholderTextColor={colors.textMuted}
                   value={form.longitude}
                   onChangeText={(v) => updateForm({ longitude: v })}
                   keyboardType="numeric"
@@ -501,6 +506,7 @@ export default function EditProperty() {
 
           <View className="gap-3 mb-5">
             <Toggle
+              colors={colors}
               label="Featured Property"
               description="Show this in the Featured section on home"
               value={form.isFeatured}
@@ -511,9 +517,12 @@ export default function EditProperty() {
           <TouchableOpacity
             onPress={handleSubmit}
             disabled={submitting || uploadingImages}
-            className="bg-teal-700 rounded-2xl py-4 items-center"
             style={{
-              shadowColor: "#0F766E",
+              backgroundColor: colors.primary,
+              borderRadius: 16,
+              paddingVertical: 16,
+              alignItems: "center",
+              shadowColor: colors.primary,
               shadowOffset: { width: 0, height: 4 },
               shadowOpacity: 0.3,
               shadowRadius: 8,
@@ -524,7 +533,7 @@ export default function EditProperty() {
             {submitting ? (
               <ActivityIndicator color="white" />
             ) : (
-              <Text className="text-white font-bold text-base">
+              <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 16 }}>
                 Save Changes
               </Text>
             )}
@@ -536,42 +545,46 @@ export default function EditProperty() {
 }
 
 const Counter = ({
+  colors,
   label,
   value,
   onChange,
 }: {
+  colors: any;
   label: string;
   value: number;
   onChange: (v: number) => void;
 }) => (
   <View className="flex-1">
-    <Text className={labelClass}>{label}</Text>
-    <View className="flex-row items-center bg-white border border-gray-200 rounded-2xl overflow-hidden">
+    <Text style={{ fontSize: 13, fontWeight: "600", color: colors.textSecondary, marginBottom: 6 }}>{label}</Text>
+    <View style={{ flexDirection: "row", alignItems: "center", backgroundColor: colors.inputBg, borderWidth: 1, borderColor: colors.border, borderRadius: 16, overflow: "hidden" }}>
       <TouchableOpacity
         onPress={() => onChange(Math.max(1, value - 1))}
-        className="w-11 h-11 items-center justify-center"
+        style={{ width: 44, height: 44, alignItems: "center", justifyContent: "center" }}
       >
-        <Ionicons name="remove" size={18} color="#374151" />
+        <Ionicons name="remove" size={18} color={colors.text} />
       </TouchableOpacity>
-      <Text className="flex-1 text-center text-gray-800 font-bold text-base">
+      <Text style={{ flex: 1, textAlign: "center", color: colors.text, fontWeight: "bold", fontSize: 16 }}>
         {value}
       </Text>
       <TouchableOpacity
         onPress={() => onChange(value + 1)}
-        className="w-11 h-11 items-center justify-center"
+        style={{ width: 44, height: 44, alignItems: "center", justifyContent: "center" }}
       >
-        <Ionicons name="add" size={18} color="#374151" />
+        <Ionicons name="add" size={18} color={colors.text} />
       </TouchableOpacity>
     </View>
   </View>
 );
 
 const Toggle = ({
+  colors,
   label,
   value,
   onChange,
   description,
 }: {
+  colors: any;
   label: string;
   value: boolean;
   onChange: (v: boolean) => void;
@@ -579,24 +592,38 @@ const Toggle = ({
 }) => (
   <TouchableOpacity
     onPress={() => onChange(!value)}
-    className={`flex-row items-center justify-between p-4 rounded-2xl border ${
-      value ? "bg-teal-50 border-teal-200" : "bg-white border-gray-200"
-    }`}
+    style={{
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      padding: 16,
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: value ? colors.primary : colors.border,
+      backgroundColor: value ? colors.primaryLight : colors.card,
+    }}
   >
-    <View className="flex-1 mr-3">
+    <View style={{ flex: 1, marginRight: 12 }}>
       <Text
-        className={`font-semibold ${value ? "text-teal-800" : "text-gray-700"}`}
+        style={{ fontWeight: "600", color: value ? colors.primaryDark : colors.textSecondary }}
       >
         {label}
       </Text>
       {description && (
-        <Text className="text-xs text-gray-400 mt-0.5">{description}</Text>
+        <Text style={{ fontSize: 12, color: colors.textMuted, marginTop: 2 }}>{description}</Text>
       )}
     </View>
     <View
-      className={`w-6 h-6 rounded-full border-2 items-center justify-center ${
-        value ? "bg-teal-700 border-teal-700" : "border-gray-300"
-      }`}
+      style={{
+        width: 24,
+        height: 24,
+        borderRadius: 12,
+        borderWidth: 2,
+        borderColor: value ? colors.primary : colors.border,
+        backgroundColor: value ? colors.primary : "transparent",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
     >
       {value && <Ionicons name="checkmark" size={14} color="white" />}
     </View>

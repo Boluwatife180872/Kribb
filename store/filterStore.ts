@@ -1,4 +1,6 @@
 import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export type PropertyType = "apartment" | "house" | "villa" | "studio" | null;
 
@@ -18,24 +20,32 @@ interface FilterState {
   resetFilters: () => void;
 }
 
-export const useFilterStore = create<FilterState>((set) => ({
-  search: "",
-  type: null,
-  bedrooms: null,
-  minPrice: null,
-  maxPrice: null,
-
-  setSearch: (value) => set({ search: value }),
-  setType: (value) => set({ type: value }),
-  setBedrooms: (value) => set({ bedrooms: value }),
-  setMinPrice: (value) => set({ minPrice: value }),
-  setMaxPrice: (value) => set({ maxPrice: value }),
-  resetFilters: () =>
-    set({
+export const useFilterStore = create<FilterState>()(
+  persist(
+    (set) => ({
       search: "",
       type: null,
       bedrooms: null,
       minPrice: null,
       maxPrice: null,
+
+      setSearch: (value) => set({ search: value }),
+      setType: (value) => set({ type: value }),
+      setBedrooms: (value) => set({ bedrooms: value }),
+      setMinPrice: (value) => set({ minPrice: value }),
+      setMaxPrice: (value) => set({ maxPrice: value }),
+      resetFilters: () =>
+        set({
+          search: "",
+          type: null,
+          bedrooms: null,
+          minPrice: null,
+          maxPrice: null,
+        }),
     }),
-}));
+    {
+      name: "kribb-filter-storage",
+      storage: createJSONStorage(() => AsyncStorage),
+    }
+  )
+);

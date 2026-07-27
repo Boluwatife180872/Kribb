@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 import { Text, TouchableOpacity, View, useWindowDimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import { useTheme } from "../../lib/theme";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -20,6 +21,7 @@ interface Props {
 const SPRING_CONFIG = { damping: 22, stiffness: 130 };
 
 export default function OnboardingContainer({ onSkip, onGetStarted, fontsLoaded }: Props) {
+  const { colors } = useTheme();
   const { width: SCREEN_WIDTH } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const [page, setPage] = useState(0);
@@ -42,14 +44,24 @@ export default function OnboardingContainer({ onSkip, onGetStarted, fontsLoaded 
 
   const panGesture = Gesture.Pan()
     .onUpdate((e) => {
-      translateX.value = -sharedPage.value * SCREEN_WIDTH + e.translationX;
+      let newX = -sharedPage.value * SCREEN_WIDTH + e.translationX;
+      if (sharedPage.value === 0 && newX > 0) {
+        newX = 0;
+      } else if (sharedPage.value === 1 && newX < -SCREEN_WIDTH) {
+        newX = -SCREEN_WIDTH;
+      }
+      translateX.value = newX;
     })
     .onEnd((e) => {
-      const threshold = SCREEN_WIDTH * 0.18;
+      const threshold = SCREEN_WIDTH * 0.1;
       if (e.translationX < -threshold && sharedPage.value < 1) {
         runOnJS(goToPage)(sharedPage.value + 1);
       } else if (e.translationX > threshold && sharedPage.value > 0) {
         runOnJS(goToPage)(sharedPage.value - 1);
+      } else if (e.translationX < -10 && sharedPage.value === 0) {
+        runOnJS(goToPage)(1);
+      } else if (e.translationX > 10 && sharedPage.value === 1) {
+        runOnJS(goToPage)(0);
       } else {
         translateX.value = withSpring(
           -sharedPage.value * SCREEN_WIDTH,
@@ -73,7 +85,7 @@ export default function OnboardingContainer({ onSkip, onGetStarted, fontsLoaded 
   const isPage0 = page === 0;
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+    <View style={{ flex: 1, backgroundColor: colors.bg }}>
       <TouchableOpacity
         onPress={onSkip}
         hitSlop={{ top: 10, bottom: 10, left: 20, right: 20 }}
@@ -88,7 +100,7 @@ export default function OnboardingContainer({ onSkip, onGetStarted, fontsLoaded 
           style={{
             fontFamily: fontsLoaded ? "JosefinSans_400Regular" : undefined,
             fontSize: 15,
-            color: isPage0 ? "rgba(255,255,255,0.8)" : "#6B7280",
+            color: isPage0 ? "rgba(255,255,255,0.8)" : colors.textSecondary,
             letterSpacing: 0.3,
           }}
         >
@@ -131,7 +143,7 @@ export default function OnboardingContainer({ onSkip, onGetStarted, fontsLoaded 
             borderRadius: 4,
             backgroundColor: isPage0
               ? "rgba(255,255,255,0.9)"
-              : "#D1D5DB",
+              : colors.border,
           }}
         />
         <View
@@ -140,7 +152,7 @@ export default function OnboardingContainer({ onSkip, onGetStarted, fontsLoaded 
             height: 8,
             borderRadius: 4,
             backgroundColor: !isPage0
-              ? "#0F766E"
+              ? colors.primary
               : "rgba(255,255,255,0.4)",
           }}
         />

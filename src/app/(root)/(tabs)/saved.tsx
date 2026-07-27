@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PropertyCard from "../../../../components/PropertyCard";
+import { useTheme } from "../../../../lib/theme";
 import { useSupabase } from "../../../../hooks/useSupabase";
 import { Property } from "../../../../types";
 
@@ -22,6 +23,7 @@ interface SavedProperty {
 }
 
 export default function Saved() {
+  const { colors } = useTheme();
   const { userId } = useAuth();
   const authSupabase = useSupabase();
   const router = useRouter();
@@ -50,11 +52,11 @@ export default function Saved() {
   );
 
 return (
-    <SafeAreaView className="flex-1 bg-gray-50" edges={['top']}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }} edges={['top']}>
       <View className="px-5 pt-4 pb-3">
-        <Text className="text-2xl font-bold text-gray-900">Saved</Text>
+        <Text style={{ fontSize: 24, fontWeight: "bold", color: colors.text }}>Saved</Text>
         {!loading && (
-          <Text className="text-sm text-gray-400 mt-1">
+          <Text style={{ fontSize: 13, color: colors.textMuted, marginTop: 4 }}>
             {saved.length} {saved.length === 1 ? "property" : "properties"}{" "}
             saved
           </Text>
@@ -62,8 +64,8 @@ return (
       </View>
 
       {loading ? (
-        <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" color="#0F766E" />
+        <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+          <ActivityIndicator size="large" color={colors.primary} />
         </View>
       ) : (
         <FlatList
@@ -82,20 +84,20 @@ return (
           )}
           ListEmptyComponent={
             <View className="flex-1 items-center justify-center py-24">
-              <View className="w-20 h-20 bg-red-50 rounded-full items-center justify-center mb-4">
-                <Ionicons name="heart-outline" size={36} color="#EF4444" />
+              <View style={{ width: 80, height: 80, backgroundColor: colors.dangerLight, borderRadius: 40, alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
+                <Ionicons name="heart-outline" size={36} color={colors.danger} />
               </View>
-              <Text className="text-gray-700 text-lg font-bold mb-1">
+              <Text style={{ color: colors.textSecondary, fontSize: 18, fontWeight: "bold", marginBottom: 4 }}>
                 No saved properties
               </Text>
-              <Text className="text-gray-400 text-sm text-center px-8">
+              <Text style={{ color: colors.textMuted, fontSize: 13, textAlign: "center", paddingHorizontal: 32 }}>
                 Tap the heart icon on any property to save it here
               </Text>
               <TouchableOpacity
                 onPress={() => router.push("/(root)/(tabs)/search")}
-                className="mt-6 bg-teal-700 px-6 py-3 rounded-2xl"
+                style={{ marginTop: 24, backgroundColor: colors.primary, paddingHorizontal: 24, paddingVertical: 12, borderRadius: 16 }}
               >
-                <Text className="text-white font-semibold">
+                <Text style={{ color: "#fff", fontWeight: "600" }}>
                   Browse Properties
                 </Text>
               </TouchableOpacity>

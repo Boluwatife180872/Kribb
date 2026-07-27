@@ -12,12 +12,14 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useTheme } from "../../../lib/theme";
 import { useSupabase } from "../../../hooks/useSupabase";
 import { useUserStore } from "../../../store/userStore";
 import { Property } from "../../../types";
 import { formatPrice } from "../../../lib/utils";
 
 export default function Admin() {
+  const { colors } = useTheme();
   const router = useRouter();
   const authSupabase = useSupabase();
   const isAdmin = useUserStore((state) => state.isAdmin);
@@ -91,80 +93,80 @@ export default function Admin() {
 
   if (loading) {
     return (
-      <SafeAreaView className="flex-1 bg-white items-center justify-center">
-        <ActivityIndicator size="large" color="#0F766E" />
+      <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg, alignItems: "center", justifyContent: "center" }}>
+        <ActivityIndicator size="large" color={colors.primary} />
       </SafeAreaView>
     );
   }
 
   const renderItem = ({ item }: { item: Property }) => (
-    <View className="bg-white rounded-2xl border border-gray-100 mb-4 overflow-hidden">
+    <View style={{ backgroundColor: colors.card, borderRadius: 16, borderWidth: 1, borderColor: colors.borderLight, marginBottom: 16, overflow: "hidden" }}>
       <Image
         source={{ uri: item.images[0] }}
-        className="w-full h-48"
+        style={{ width: "100%", height: 192 }}
         resizeMode="cover"
       />
       <View className="p-4">
         <View className="flex-row items-center gap-2 mb-2">
           {item.is_sold && (
-            <View className="bg-red-50 px-2 py-0.5 rounded-full">
-              <Text className="text-red-500 text-xs font-semibold">Sold</Text>
+            <View style={{ backgroundColor: colors.dangerLight, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 999 }}>
+              <Text style={{ color: colors.danger, fontSize: 12, fontWeight: "600" }}>Sold</Text>
             </View>
           )}
           {item.is_featured && (
-            <View className="bg-amber-50 px-2 py-0.5 rounded-full">
-              <Text className="text-amber-600 text-xs font-semibold">
+            <View style={{ backgroundColor: "#FFFBEB", paddingHorizontal: 8, paddingVertical: 2, borderRadius: 999 }}>
+              <Text style={{ color: "#D97706", fontSize: 12, fontWeight: "600" }}>
                 Featured
               </Text>
             </View>
           )}
-          <View className="bg-teal-50 px-2 py-0.5 rounded-full">
-            <Text className="text-teal-700 text-xs font-semibold capitalize">
+          <View style={{ backgroundColor: colors.primaryLight, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 999 }}>
+            <Text style={{ color: colors.primary, fontSize: 12, fontWeight: "600", textTransform: "capitalize" }}>
               {item.type}
             </Text>
           </View>
         </View>
         <Text
-          className="text-base font-bold text-gray-900 mb-1"
+          style={{ fontSize: 16, fontWeight: "bold", color: colors.text, marginBottom: 4 }}
           numberOfLines={1}
         >
           {item.title}
         </Text>
-        <Text className="text-teal-700 font-bold mb-3">
+        <Text style={{ color: colors.primary, fontWeight: "bold", marginBottom: 12 }}>
           {formatPrice(item.price)}
         </Text>
-        <Text className="text-gray-400 text-xs mb-3">
+        <Text style={{ color: colors.textMuted, fontSize: 12, marginBottom: 12 }}>
           {item.address}, {item.city}
         </Text>
         <View className="flex-row gap-2">
           <TouchableOpacity
             onPress={() => handleEdit(item)}
-            className="flex-1 flex-row items-center justify-center gap-1 bg-teal-50 py-3 rounded-xl border border-teal-100"
+            style={{ flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 4, backgroundColor: colors.primaryLight, paddingVertical: 12, borderRadius: 12, borderWidth: 1, borderColor: colors.primaryLight }}
           >
-            <Ionicons name="create-outline" size={16} color="#0F766E" />
-            <Text className="text-teal-700 font-semibold text-sm">Edit</Text>
+            <Ionicons name="create-outline" size={16} color={colors.primary} />
+            <Text style={{ color: colors.primary, fontWeight: "600", fontSize: 13 }}>Edit</Text>
           </TouchableOpacity>
           {!item.is_sold && (
             <TouchableOpacity
               onPress={() => handleMarkSold(item)}
-              className="flex-1 flex-row items-center justify-center gap-1 bg-amber-50 py-3 rounded-xl border border-amber-100"
+              style={{ flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 4, backgroundColor: "#FFFBEB", paddingVertical: 12, borderRadius: 12, borderWidth: 1, borderColor: "#FDE68A" }}
             >
               <Ionicons
                 name="checkmark-circle-outline"
                 size={16}
                 color="#D97706"
               />
-              <Text className="text-amber-600 font-semibold text-sm">
+              <Text style={{ color: "#D97706", fontWeight: "600", fontSize: 13 }}>
                 Sold
               </Text>
             </TouchableOpacity>
           )}
           <TouchableOpacity
             onPress={() => handleDelete(item)}
-            className="flex-1 flex-row items-center justify-center gap-1 bg-red-50 py-3 rounded-xl border border-red-100"
+            style={{ flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 4, backgroundColor: colors.dangerLight, paddingVertical: 12, borderRadius: 12, borderWidth: 1, borderColor: colors.dangerLight }}
           >
-            <Ionicons name="trash-outline" size={16} color="#EF4444" />
-            <Text className="text-red-500 font-semibold text-sm">Delete</Text>
+            <Ionicons name="trash-outline" size={16} color={colors.danger} />
+            <Text style={{ color: colors.danger, fontWeight: "600", fontSize: 13 }}>Delete</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -172,16 +174,16 @@ export default function Admin() {
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }} edges={["top"]}>
       <View className="px-5 pt-4 pb-3">
         <View className="flex-row items-center gap-3">
-          <TouchableOpacity onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="#111827" />
+          <TouchableOpacity onPress={() => router.replace("/(root)/(tabs)/profile")}>
+            <Ionicons name="arrow-back" size={24} color={colors.text} />
           </TouchableOpacity>
-          <Text className="text-2xl font-bold text-gray-900 flex-1">
+          <Text style={{ fontSize: 24, fontWeight: "bold", color: colors.text, flex: 1 }}>
             Manage Listings
           </Text>
-          <Text className="text-gray-400 text-sm">
+          <Text style={{ color: colors.textMuted, fontSize: 13 }}>
             {properties.length} total
           </Text>
         </View>
@@ -197,8 +199,8 @@ export default function Admin() {
         }
         ListEmptyComponent={
           <View className="flex-1 items-center justify-center pt-20">
-            <Ionicons name="home-outline" size={48} color="#D1D5DB" />
-            <Text className="text-gray-400 mt-4">No listings yet</Text>
+            <Ionicons name="home-outline" size={48} color={colors.border} />
+            <Text style={{ color: colors.textMuted, marginTop: 16 }}>No listings yet</Text>
           </View>
         }
       />

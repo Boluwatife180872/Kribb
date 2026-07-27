@@ -10,6 +10,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useTheme } from "../lib/theme";
 import { PropertyType, useFilterStore } from "../store/filterStore";
 
 const TYPES: { label: string; value: PropertyType }[] = [
@@ -35,14 +36,6 @@ const PRICE_PRESETS = [
   { label: "Above ₦20M", min: 20000000, max: null },
 ];
 
-const chip = (active: boolean) =>
-  `px-4 py-2 rounded-full border ${
-    active ? "bg-teal-700 border-teal-700" : "bg-white border-gray-200"
-  }`;
-
-const chipText = (active: boolean) =>
-  `text-sm font-semibold ${active ? "text-white" : "text-gray-600"}`;
-
 export default function FilterModal({
   visible,
   onClose,
@@ -50,6 +43,7 @@ export default function FilterModal({
   visible: boolean;
   onClose: () => void;
 }) {
+  const { colors } = useTheme();
   const {
     type,
     bedrooms,
@@ -98,14 +92,14 @@ export default function FilterModal({
       statusBarTranslucent={Platform.OS === "android"}
       onRequestClose={onClose}
     >
-      <SafeAreaView className="flex-1 bg-gray-50">
-        <View className="flex-row items-center justify-between px-5 pt-6 pb-4 bg-white border-b border-gray-100">
+      <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
+        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 20, paddingTop: 24, paddingBottom: 16, backgroundColor: colors.surface, borderBottomWidth: 1, borderBottomColor: colors.borderLight }}>
           <TouchableOpacity onPress={onClose} className="p-1">
-            <Ionicons name="close" size={22} color="#374151" />
+            <Ionicons name="close" size={22} color={colors.text} />
           </TouchableOpacity>
-          <Text className="text-lg font-bold text-gray-900">Filters</Text>
+          <Text style={{ fontSize: 18, fontWeight: "bold", color: colors.text }}>Filters</Text>
           <TouchableOpacity onPress={handleReset}>
-            <Text className="text-teal-700 font-semibold text-sm">Reset</Text>
+            <Text style={{ color: colors.primary, fontWeight: "600", fontSize: 13 }}>Reset</Text>
           </TouchableOpacity>
         </View>
 
@@ -114,54 +108,67 @@ export default function FilterModal({
           contentContainerStyle={{ padding: 20, paddingBottom: 40 }}
           showsVerticalScrollIndicator={false}
         >
-          <Text className="text-base font-bold text-gray-800 mb-3">
+          <Text style={{ fontSize: 16, fontWeight: "bold", color: colors.text, marginBottom: 12 }}>
             Property Type
           </Text>
-          <View className="flex-row flex-wrap gap-2 mb-6">
-            {TYPES.map((item) => (
-              <TouchableOpacity
-                key={String(item.value)}
-                onPress={() => setType(item.value)}
-                className={chip(type === item.value)}
-                style={shadow}
-              >
-                <Text className={chipText(type === item.value)}>
-                  {item.label}
-                </Text>
-              </TouchableOpacity>
-            ))}
+          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, marginBottom: 24 }}>
+            {TYPES.map((item) => {
+              const active = type === item.value;
+              return (
+                <TouchableOpacity
+                  key={String(item.value)}
+                  onPress={() => setType(item.value)}
+                  style={[shadow, {
+                    paddingHorizontal: 16,
+                    paddingVertical: 8,
+                    borderRadius: 999,
+                    borderWidth: 1,
+                    borderColor: active ? colors.primary : colors.border,
+                    backgroundColor: active ? colors.primary : colors.card,
+                  }]}
+                >
+                  <Text style={{ fontSize: 13, fontWeight: "600", color: active ? "#fff" : colors.textSecondary }}>
+                    {item.label}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
           </View>
 
           {/* Bedrooms */}
-          <Text className="text-base font-bold text-gray-800 mb-3">
+          <Text style={{ fontSize: 16, fontWeight: "bold", color: colors.text, marginBottom: 12 }}>
             Bedrooms
           </Text>
-          <View className="flex-row gap-2 mb-6">
-            {BEDS.map((item) => (
-              <TouchableOpacity
-                key={String(item.value)}
-                onPress={() => setBedrooms(item.value)}
-                className={`flex-1 items-center py-3 rounded-2xl border ${chip(
-                  bedrooms === item.value,
-                )}`}
-                style={shadow}
-              >
-                <Text
-                  className={`text-sm font-bold ${
-                    bedrooms === item.value ? "text-white" : "text-gray-600"
-                  }`}
+          <View style={{ flexDirection: "row", gap: 8, marginBottom: 24 }}>
+            {BEDS.map((item) => {
+              const active = bedrooms === item.value;
+              return (
+                <TouchableOpacity
+                  key={String(item.value)}
+                  onPress={() => setBedrooms(item.value)}
+                  style={[shadow, {
+                    flex: 1,
+                    alignItems: "center",
+                    paddingVertical: 12,
+                    borderRadius: 16,
+                    borderWidth: 1,
+                    borderColor: active ? colors.primary : colors.border,
+                    backgroundColor: active ? colors.primary : colors.card,
+                  }]}
                 >
-                  {item.label}
-                </Text>
-              </TouchableOpacity>
-            ))}
+                  <Text style={{ fontSize: 13, fontWeight: "bold", color: active ? "#fff" : colors.textSecondary }}>
+                    {item.label}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
           </View>
 
-          <Text className="text-base font-bold text-gray-800 mb-3">
+          <Text style={{ fontSize: 16, fontWeight: "bold", color: colors.text, marginBottom: 12 }}>
             Price Range (₦)
           </Text>
 
-          <View className="flex-row gap-3 mb-3">
+          <View style={{ flexDirection: "row", gap: 12, marginBottom: 12 }}>
             {[
               {
                 label: "Min Price",
@@ -176,19 +183,26 @@ export default function FilterModal({
                 placeholder: "Any",
               },
             ].map(({ label, value, onChange, placeholder }) => (
-              <View key={label} className="flex-1">
-                <Text className="text-xs text-gray-500 mb-1.5 font-medium">
+              <View key={label} style={{ flex: 1 }}>
+                <Text style={{ fontSize: 12, color: colors.textMuted, marginBottom: 6, fontWeight: "500" }}>
                   {label}
                 </Text>
                 <View
-                  className="flex-row items-center bg-white rounded-2xl px-3 border border-gray-200"
-                  style={shadow}
+                  style={[shadow, {
+                    flexDirection: "row",
+                    alignItems: "center",
+                    backgroundColor: colors.inputBg,
+                    borderRadius: 16,
+                    paddingHorizontal: 12,
+                    borderWidth: 1,
+                    borderColor: colors.border,
+                  }]}
                 >
-                  <Text className="text-gray-400 text-sm mr-1">₦</Text>
+                  <Text style={{ color: colors.textMuted, fontSize: 13, marginRight: 4 }}>₦</Text>
                   <TextInput
-                    className="flex-1 py-3 text-gray-800"
+                    style={{ flex: 1, paddingVertical: 12, color: colors.text }}
                     placeholder={placeholder}
-                    placeholderTextColor="#9CA3AF"
+                    placeholderTextColor={colors.textMuted}
                     keyboardType="numeric"
                     value={value}
                     onChangeText={onChange}
@@ -198,7 +212,7 @@ export default function FilterModal({
             ))}
           </View>
 
-          <View className="flex-row gap-2 mb-6">
+          <View style={{ flexDirection: "row", gap: 8, marginBottom: 24 }}>
             {PRICE_PRESETS.map((p) => {
               const active = minPrice === p.min && maxPrice === p.max;
               return (
@@ -210,16 +224,17 @@ export default function FilterModal({
                     setMinPrice(p.min);
                     setMaxPrice(p.max);
                   }}
-                  className={`px-3 py-1.5 rounded-full border ${
-                    active
-                      ? "bg-teal-50 border-teal-300"
-                      : "bg-white border-gray-200"
-                  }`}
+                  style={{
+                    paddingHorizontal: 12,
+                    paddingVertical: 6,
+                    borderRadius: 999,
+                    borderWidth: 1,
+                    borderColor: active ? colors.primary : colors.border,
+                    backgroundColor: active ? colors.primaryLight : colors.card,
+                  }}
                 >
                   <Text
-                    className={`text-xs font-medium ${
-                      active ? "text-teal-700" : "text-gray-500"
-                    }`}
+                    style={{ fontSize: 12, fontWeight: "500", color: active ? colors.primary : colors.textMuted }}
                   >
                     {p.label}
                   </Text>
@@ -230,19 +245,22 @@ export default function FilterModal({
         </ScrollView>
 
         {/* Apply Button */}
-        <View className="px-5 pb-16 pt-4 bg-white border-t border-gray-100">
+        <View style={{ paddingHorizontal: 20, paddingBottom: 64, paddingTop: 16, backgroundColor: colors.surface, borderTopWidth: 1, borderTopColor: colors.borderLight }}>
           <TouchableOpacity
             onPress={handleApply}
-            className="bg-teal-700 rounded-2xl py-4 items-center"
             style={{
-              shadowColor: "#0F766E",
+              backgroundColor: colors.primary,
+              borderRadius: 16,
+              paddingVertical: 16,
+              alignItems: "center",
+              shadowColor: colors.primary,
               shadowOffset: { width: 0, height: 4 },
               shadowOpacity: 0.3,
               shadowRadius: 8,
               elevation: 4,
             }}
           >
-            <Text className="text-white font-bold text-base">
+            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 16 }}>
               Apply Filters{activeCount > 0 ? ` (${activeCount})` : ""}
             </Text>
           </TouchableOpacity>
