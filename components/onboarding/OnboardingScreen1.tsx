@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Image, Text, TouchableOpacity, View, useWindowDimensions } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTheme } from "../../lib/theme";
@@ -12,7 +12,6 @@ interface Props {
 
 export default function OnboardingScreen1({ fontsLoaded, onAdvance }: Props) {
   const { colors } = useTheme();
-  const { width, height } = useWindowDimensions();
   const bounce = useSharedValue(0);
 
   useEffect(() => {
@@ -31,14 +30,14 @@ export default function OnboardingScreen1({ fontsLoaded, onAdvance }: Props) {
     <View style={{ flex: 1, backgroundColor: colors.bg }}>
       <Image
         source={require("../../assets/images/house7.jpg")}
-        style={{ position: "absolute", top: 0, left: 0, width, height }}
+        style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}
         resizeMode="cover"
       />
 
       <LinearGradient
         colors={["transparent", "rgba(0,0,0,0.65)"]}
         locations={[0.45, 1]}
-        style={{ position: "absolute", bottom: 0, left: 0, width, height: height * 0.5 }}
+        style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "50%" }}
       />
 
       <Animated.View
