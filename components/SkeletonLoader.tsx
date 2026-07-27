@@ -48,7 +48,7 @@ export function SkeletonItem() {
           backgroundColor: colors.skeleton,
         }}
       />
-      <View style={{ flex: 1, justifyContent: "space-between", py: 4 }}>
+      <View style={{ flex: 1, justifyContent: "space-between", paddingVertical: 4 }}>
         <View
           style={{
             height: 16,
