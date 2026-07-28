@@ -53,7 +53,7 @@ export default function OnboardingScreen1({ fontsLoaded, onAdvance }: Props) {
             letterSpacing: -0.5,
           }}
         >
-          Discover Your{'\n'}Next Home
+          Discover Your{'\n'}Next Home!
         </Text>
         <Text
           style={{
