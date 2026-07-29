@@ -212,7 +212,12 @@ export default function FilterModal({
             ))}
           </View>
 
-          <View style={{ flexDirection: "row", gap: 8, marginBottom: 24 }}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ gap: 8 }}
+            style={{ marginBottom: 24 }}
+          >
             {PRICE_PRESETS.map((p) => {
               const active = minPrice === p.min && maxPrice === p.max;
               return (
@@ -241,7 +246,7 @@ export default function FilterModal({
                 </TouchableOpacity>
               );
             })}
-          </View>
+          </ScrollView>
         </ScrollView>
 
         {/* Apply Button */}
